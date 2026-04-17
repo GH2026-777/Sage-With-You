@@ -1,0 +1,121 @@
+@echo off
+echo ============================================
+echo LEVEL7 AUTOMATED DEPLOYMENT
+echo ============================================
+echo.
+
+REM Get current directory
+set "CURRENT_DIR=%CD%"
+echo Working directory: %CURRENT_DIR%
+echo.
+
+REM Check if we're in the right place
+if not exist "src\app\App.tsx" (
+    echo ERROR: App.tsx not found!
+    echo Please run this script from your Level7 project folder.
+    echo Current location: %CD%
+    pause
+    exit /b 1
+)
+
+REM Check for .env file (optional for Level7 staging)
+echo [1/7] Checking environment configuration...
+if exist ".env" (
+    echo    .env file found
+) else (
+    echo    NOTE: .env file not found (this is normal for staging)
+    echo    Using default Supabase configuration
+)
+echo.
+
+REM Clean old build files
+echo [2/7] Cleaning old build files...
+if exist "node_modules" rmdir /s /q "node_modules"
+if exist "dist" rmdir /s /q "dist"
+if exist "package-lock.json" del /f /q "package-lock.json"
+echo    Clean complete
+echo.
+
+REM Install dependencies
+echo [3/7] Installing dependencies...
+call npm install
+if errorlevel 1 (
+    echo ERROR: npm install failed!
+    echo Make sure Node.js and npm are installed.
+    pause
+    exit /b 1
+)
+echo.
+
+REM Build
+echo [4/7] Building project...
+call npm run build
+if errorlevel 1 (
+    echo ERROR: Build failed!
+    echo Check the error messages above.
+    pause
+    exit /b 1
+)
+echo.
+
+REM Verify dist folder was created
+if not exist "dist\index.html" (
+    echo ERROR: Build did not create dist folder properly!
+    pause
+    exit /b 1
+)
+
+REM Create .htaccess for React Router
+echo [5/7] Creating .htaccess for React Router...
+(
+echo ^<IfModule mod_rewrite.c^>
+echo   RewriteEngine On
+echo   RewriteBase /
+echo   RewriteRule ^^index\.html$ - [L]
+echo   RewriteCond %%{REQUEST_FILENAME} !-f
+echo   RewriteCond %%{REQUEST_FILENAME} !-d
+echo   RewriteCond %%{REQUEST_FILENAME} !-l
+echo   RewriteRule . /index.html [L]
+echo ^</IfModule^>
+) > "dist\.htaccess"
+echo    .htaccess created
+echo.
+
+REM Create zip
+echo [6/7] Creating deployment zip...
+if exist "level7-deploy.zip" del /f /q "level7-deploy.zip"
+powershell Compress-Archive -Path "dist\*" -DestinationPath "level7-deploy.zip" -Force
+if errorlevel 1 (
+    echo ERROR: Failed to create zip file!
+    pause
+    exit /b 1
+)
+echo.
+
+REM Summary
+echo [7/7] Build complete!
+echo.
+echo ============================================
+echo SUCCESS! Deployment package ready.
+echo ============================================
+echo.
+echo File: level7-deploy.zip
+echo Location: %CD%\level7-deploy.zip
+echo.
+echo UPLOAD INSTRUCTIONS:
+echo 1. Login to GoDaddy cPanel
+echo 2. Go to File Manager
+echo 3. Navigate to public_html (or your staging subdirectory)
+echo 4. Delete all existing files in that directory
+echo 5. Upload level7-deploy.zip
+echo 6. Extract the zip file
+echo 7. Delete the zip file from server
+echo.
+echo IMPORTANT NOTES:
+echo - Gate password is: level7staging
+echo - Backend uses Supabase: nwgalyhwhwgyhkuihpai.supabase.co
+echo - This is a STAGING environment (gate protected)
+echo.
+echo Your site will be accessible after deployment!
+echo ============================================
+pause

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sage-with-you.org/sitemap.xml
