@@ -76,7 +76,7 @@ export function AccessibilityWidget() {
       {/* Floating Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-teal-600 hover:bg-teal-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110"
+        className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-sage-600 hover:bg-sage-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110"
         aria-label="Accessibility Settings"
       >
         <Settings className="h-6 w-6" />
@@ -85,11 +85,11 @@ export function AccessibilityWidget() {
       {/* Accessibility Panel */}
       {isOpen && (
         <div className="fixed bottom-24 right-6 z-50 w-80 animate-in slide-in-from-bottom-5">
-          <Card className="shadow-2xl border-2 border-teal-600">
-            <CardHeader className="bg-teal-50">
+          <Card className="shadow-2xl border-2 border-sage-600">
+            <CardHeader className="bg-sage-50">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <Settings className="h-5 w-5 text-teal-600" />
+                  <Settings className="h-5 w-5 text-sage-600" />
                   Accessibility
                 </CardTitle>
                 <Button
@@ -105,7 +105,7 @@ export function AccessibilityWidget() {
               {/* Font Size */}
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <Type className="h-4 w-4 text-teal-600" />
+                  <Type className="h-4 w-4 text-sage-600" />
                   <Label className="text-sm font-medium">
                     Text Size: {fontSize}%
                   </Label>
@@ -129,7 +129,7 @@ export function AccessibilityWidget() {
               {/* High Contrast */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Contrast className="h-4 w-4 text-teal-600" />
+                  <Contrast className="h-4 w-4 text-sage-600" />
                   <Label className="text-sm font-medium">High Contrast</Label>
                 </div>
                 <Switch
@@ -141,7 +141,7 @@ export function AccessibilityWidget() {
               {/* Text to Speech */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Volume2 className="h-4 w-4 text-teal-600" />
+                  <Volume2 className="h-4 w-4 text-sage-600" />
                   <Label className="text-sm font-medium">
                     Text to Speech
                   </Label>
@@ -153,7 +153,7 @@ export function AccessibilityWidget() {
               </div>
 
               {textToSpeech && (
-                <p className="text-xs text-gray-600 bg-teal-50 p-2 rounded">
+                <p className="text-xs text-gray-600 bg-sage-50 p-2 rounded">
                   Click on any text to hear it read aloud
                 </p>
               )}

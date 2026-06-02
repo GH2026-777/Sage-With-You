@@ -5,6 +5,10 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { supabase } from '../../utils/supabase';
+import { AuthBrandHeader } from '../components/AuthBrandHeader';
+import { BackToHomeLink } from '../components/BackToHome';
+import { authErrorMessage } from '../../utils/authErrorMessage';
+import { authEmailRedirect } from '../../utils/authRedirect';
 
 export function ForgotPassword() {
   const [searchParams] = useSearchParams();
@@ -25,7 +29,7 @@ export function ForgotPassword() {
 
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
+        redirectTo: authEmailRedirect('/reset-password'),
       });
 
       if (error) throw error;
@@ -33,7 +37,10 @@ export function ForgotPassword() {
       setSuccess(true);
     } catch (error: unknown) {
       setError(
-        error instanceof Error ? error.message : "Failed to send reset email. Please try again.",
+        authErrorMessage(
+          error,
+          'Failed to send reset email. Please try again.',
+        ),
       );
     } finally {
       setIsLoading(false);
@@ -42,10 +49,10 @@ export function ForgotPassword() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-teal-50 via-blue-50 to-teal-50 flex items-center justify-center px-4 py-12">
+      <div className="min-h-screen bg-gradient-to-br from-sage-50 via-sage-50 to-sage-50 flex items-center justify-center px-4 py-12">
         <Card className="w-full max-w-md border-gray-200 shadow-xl">
           <CardContent className="pt-6 text-center">
-            <CheckCircle className="h-16 w-16 text-teal-600 mx-auto mb-4" />
+            <CheckCircle className="h-16 w-16 text-sage-600 mx-auto mb-4" />
             <h2 className="text-2xl font-semibold text-gray-900 mb-2">
               Check Your Email
             </h2>
@@ -58,13 +65,13 @@ export function ForgotPassword() {
                 Didn't receive the email? Check your spam folder or{' '}
                 <button
                   onClick={() => setSuccess(false)}
-                  className="text-teal-600 hover:text-teal-700 hover:underline font-medium"
+                  className="text-sage-600 hover:text-sage-700 hover:underline font-medium"
                 >
                   try again
                 </button>
               </p>
               <Link to="/login">
-                <Button variant="outline" className="w-full border-teal-600 text-teal-600 hover:bg-teal-50">
+                <Button variant="outline" className="w-full border-sage-600 text-sage-600 hover:bg-sage-50">
                   Back to Sign In
                 </Button>
               </Link>
@@ -76,17 +83,10 @@ export function ForgotPassword() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-blue-50 to-teal-50 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-sage-50 via-sage-50 to-sage-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
-        {/* Logo/Branding */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-semibold text-teal-600 mb-2">
-            SageÉlan Foundation
-          </h1>
-          <p className="text-gray-600">Sage With You - Living in Place</p>
-        </div>
-
-        <Card className="border-gray-200 shadow-xl">
+        <Card className="border-gray-200 shadow-xl overflow-hidden">
+          <AuthBrandHeader />
           <CardHeader>
             <CardTitle className="text-2xl text-center text-gray-900">
               Reset Password
@@ -126,7 +126,7 @@ export function ForgotPassword() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-teal-600 hover:bg-teal-700 text-white"
+                className="w-full bg-sage-600 hover:bg-sage-700 text-white"
               >
                 {isLoading ? 'Sending...' : 'Send Reset Link'}
               </Button>
@@ -137,7 +137,7 @@ export function ForgotPassword() {
                 Remember your password?{' '}
                 <Link
                   to="/login"
-                  className="text-teal-600 hover:text-teal-700 font-medium hover:underline"
+                  className="text-sage-600 hover:text-sage-700 font-medium hover:underline"
                 >
                   Sign in
                 </Link>
@@ -145,12 +145,7 @@ export function ForgotPassword() {
             </div>
 
             <div className="mt-6 text-center">
-              <Link
-                to="/"
-                className="text-sm text-gray-600 hover:text-gray-700 hover:underline"
-              >
-                ← Back to home
-              </Link>
+              <BackToHomeLink className="text-sm text-gray-600 hover:text-gray-700 hover:underline" />
             </div>
           </CardContent>
         </Card>

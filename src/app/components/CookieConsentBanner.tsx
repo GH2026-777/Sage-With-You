@@ -1,5 +1,5 @@
 /**
- * Cookie banner — `cookie_consent` storage key aligned with other SageÉlan properties (e.g. SagePanthers).
+ * Cookie banner - `cookie_consent` storage key aligned with other SageÉlan properties (e.g. SagePanthers).
  * Optional analytics hook via onConsentChange when you add measurement tags.
  */
 
@@ -54,9 +54,9 @@ export function CookieConsentBanner({ onConsentChange }: CookieConsentBannerProp
         className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 to-transparent"
         aria-hidden
       />
-      <div className="relative mx-auto max-w-4xl rounded-xl border-2 border-teal-200 bg-white p-6 shadow-2xl">
+      <div className="relative mx-auto max-w-4xl rounded-xl border-2 border-sage-200 bg-white p-6 shadow-2xl">
         <div className="flex items-start gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-teal-100 text-teal-700">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-sage-100 text-sage-700">
             <Cookie className="h-6 w-6" aria-hidden />
           </div>
           <div className="min-w-0 flex-1">
@@ -76,11 +76,11 @@ export function CookieConsentBanner({ onConsentChange }: CookieConsentBannerProp
               analytics scripts today; if you accept, that records your choice so we can turn on measurement later under
               the same notice (storage key{" "}
               <code className="rounded bg-gray-100 px-1 text-xs">cookie_consent</code>). Read the{" "}
-              <Link to="/privacy" className="font-medium text-teal-700 underline-offset-2 hover:underline">
+              <Link to="/privacy" className="font-medium text-sage-700 underline-offset-2 hover:underline">
                 Privacy policy
               </Link>{" "}
               and change preferences anytime on{" "}
-              <Link to="/account#cookies" className="font-medium text-teal-700 underline-offset-2 hover:underline">
+              <Link to="/account#cookies" className="font-medium text-sage-700 underline-offset-2 hover:underline">
                 Account → Cookies
               </Link>
               .
@@ -96,7 +96,7 @@ export function CookieConsentBanner({ onConsentChange }: CookieConsentBannerProp
               <button
                 type="button"
                 onClick={() => persist("accepted")}
-                className="rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700"
+                className="rounded-lg bg-sage-600 px-4 py-2 text-sm font-medium text-white hover:bg-sage-700"
               >
                 Accept all
               </button>

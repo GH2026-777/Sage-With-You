@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { Heart, Users, BookOpen, Home as HomeIcon, ArrowRight, ClipboardCheck, Library, Settings, Smartphone } from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
+import { SiteLogo } from "../components/SiteLogo";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 
@@ -67,24 +68,22 @@ export function Home() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-teal-50 to-blue-50 py-20 lg:py-28">
+      <section
+        id="hero"
+        className="relative bg-gradient-to-br from-sage-50 to-sage-50 py-20 lg:py-28 scroll-mt-20"
+      >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h1 className="text-4xl lg:text-5xl mb-6 text-gray-900">
-                <span className="block">Sage With You</span>
-                <span className="block text-teal-600 mt-2">
-                  Living in Place
-                </span>
-              </h1>
-              <p className="text-xl text-gray-700 mb-8 leading-relaxed">
+              <SiteLogo variant="hero" linkToHome={false} className="mb-2.5 block lg:mb-3.5" />
+              <p className="max-w-xl text-lg text-gray-700 mb-8 leading-relaxed sm:text-xl">
                 Your supportive partner for aging with dignity and confidence.
                 We provide evidence-informed guidance for individuals,
                 caregivers, and families choosing to age at home.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link to="/programs">
-                  <Button size="lg" className="bg-teal-600 hover:bg-teal-700">
+                  <Button size="lg" className="bg-sage-600 hover:bg-sage-700">
                     Explore Our Programs
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
@@ -93,7 +92,7 @@ export function Home() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="border-teal-600 text-teal-600 hover:bg-teal-50"
+                    className="border-sage-600 text-sage-600 hover:bg-sage-50"
                   >
                     View Resources
                   </Button>
@@ -132,16 +131,16 @@ export function Home() {
               const Icon = feature.icon;
               return (
                 <Link key={index} to={feature.path}>
-                  <Card className="border-gray-200 hover:shadow-lg hover:border-teal-300 transition-all cursor-pointer h-full">
+                  <Card className="border-gray-200 hover:shadow-lg hover:border-sage-300 transition-all cursor-pointer h-full">
                     <CardContent className="pt-6">
-                      <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mb-4">
-                        <Icon className="h-6 w-6 text-teal-600" />
+                      <div className="w-12 h-12 bg-sage-100 rounded-lg flex items-center justify-center mb-4">
+                        <Icon className="h-6 w-6 text-sage-600" />
                       </div>
                       <h3 className="text-xl mb-3 text-gray-900">
                         {feature.title}
                       </h3>
                       <p className="text-gray-600">{feature.description}</p>
-                      <div className="mt-4 flex items-center text-teal-600 font-medium">
+                      <div className="mt-4 flex items-center text-sage-600 font-medium">
                         Learn more
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </div>
@@ -155,21 +154,21 @@ export function Home() {
       </section>
 
       {/* Mission Statement */}
-      <section className="py-20 bg-teal-600 text-white">
+      <section className="py-20 bg-sage-600 text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl lg:text-4xl mb-6">
                 Our Commitment to You
               </h2>
-              <p className="text-lg mb-6 text-teal-50">
+              <p className="text-lg mb-6 text-sage-50">
                 "Sage With You" communicates our role as your supportive
                 partner, emphasizing dignity, clarity, and companionship.
                 "Living in Place" represents a person-centered approach to
-                aging—one that respects your choice to remain in the comfort and
+                aging, one that respects your choice to remain in the comfort and
                 familiarity of your own home.
               </p>
-              <p className="text-lg text-teal-50">
+              <p className="text-lg text-sage-50">
                 We believe in empowering individuals and their caregivers with
                 the knowledge, resources, and support needed to navigate the
                 journey of aging with confidence and grace.
@@ -198,7 +197,7 @@ export function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/about">
-              <Button size="lg" className="bg-teal-600 hover:bg-teal-700">
+              <Button size="lg" className="bg-sage-600 hover:bg-sage-700">
                 About Our Foundation
               </Button>
             </Link>
@@ -206,7 +205,7 @@ export function Home() {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-teal-600 text-teal-600 hover:bg-teal-50"
+                className="border-sage-600 text-sage-600 hover:bg-sage-50"
               >
                 Get in Touch
               </Button>

@@ -1,7 +1,13 @@
 import { createBrowserRouter } from "react-router";
+import { AppShell } from "./components/AppShell";
 import { Layout } from "./components/layout";
+import { RouteFallback } from "./components/RouteFallback";
 
 export const router = createBrowserRouter([
+  {
+    hydrateFallbackElement: <RouteFallback />,
+    element: <AppShell />,
+    children: [
   {
     path: "/",
     Component: Layout,
@@ -102,5 +108,7 @@ export const router = createBrowserRouter([
   {
     path: "reset-password",
     lazy: () => import("./pages/reset-password").then((m) => ({ Component: m.ResetPassword })),
+  },
+    ],
   },
 ]);

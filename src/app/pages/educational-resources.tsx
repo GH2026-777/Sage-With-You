@@ -101,12 +101,12 @@ export function EducationalResources() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-teal-50 to-blue-50 py-20">
+      <section className="bg-gradient-to-br from-sage-50 to-sage-50 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-14 h-14 bg-teal-600 rounded-lg flex items-center justify-center">
+                <div className="w-14 h-14 bg-sage-600 rounded-lg flex items-center justify-center">
                   <BookOpen className="h-7 w-7 text-white" />
                 </div>
                 <h1 className="text-4xl lg:text-5xl text-gray-900">
@@ -149,8 +149,8 @@ export function EducationalResources() {
               return (
                 <Card key={index} className="border-gray-200 hover:shadow-lg transition-shadow">
                   <CardHeader>
-                    <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mb-4">
-                      <Icon className="h-6 w-6 text-teal-600" />
+                    <div className="w-12 h-12 bg-sage-100 rounded-lg flex items-center justify-center mb-4">
+                      <Icon className="h-6 w-6 text-sage-600" />
                     </div>
                     <CardTitle className="text-xl text-gray-900">
                       {type.title}
@@ -164,7 +164,7 @@ export function EducationalResources() {
                         {type.examples.map((example, i) => (
                           <span
                             key={i}
-                            className="inline-block px-3 py-1 bg-teal-50 text-teal-700 text-sm rounded-full"
+                            className="inline-block px-3 py-1 bg-sage-50 text-sage-700 text-sm rounded-full"
                           >
                             {example}
                           </span>
@@ -196,7 +196,7 @@ export function EducationalResources() {
               <Card key={index} className="border-gray-200 bg-white">
                 <CardHeader>
                   <CardTitle className="text-lg text-gray-900 flex items-center gap-2">
-                    <Lightbulb className="h-5 w-5 text-teal-600" />
+                    <Lightbulb className="h-5 w-5 text-sage-600" />
                     {area.title}
                   </CardTitle>
                 </CardHeader>
@@ -204,7 +204,7 @@ export function EducationalResources() {
                   <ul className="space-y-2">
                     {area.topics.map((topic, i) => (
                       <li key={i} className="flex items-start gap-2 text-gray-600">
-                        <span className="text-teal-600 mt-1.5">•</span>
+                        <span className="text-sage-600 mt-1.5">•</span>
                         <span>{topic}</span>
                       </li>
                     ))}
@@ -229,9 +229,9 @@ export function EducationalResources() {
             {benefits.map((benefit, index) => (
               <div
                 key={index}
-                className="flex items-start gap-3 p-4 bg-teal-50 rounded-lg"
+                className="flex items-start gap-3 p-4 bg-sage-50 rounded-lg"
               >
-                <CheckSquare className="h-5 w-5 text-teal-600 flex-shrink-0 mt-0.5" />
+                <CheckSquare className="h-5 w-5 text-sage-600 flex-shrink-0 mt-0.5" />
                 <p className="text-gray-700">{benefit}</p>
               </div>
             ))}
@@ -240,16 +240,16 @@ export function EducationalResources() {
       </section>
 
       {/* CTA to Library */}
-      <section className="py-20 bg-teal-600 text-white">
+      <section className="py-20 bg-sage-600 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl lg:text-4xl mb-6">
             Ready to Start Learning?
           </h2>
-          <p className="text-xl text-teal-50 leading-relaxed mb-8">
+          <p className="text-xl text-sage-50 leading-relaxed mb-8">
             Browse our comprehensive resource library with hundreds of guides, checklists, videos, and articles. Search by topic, save your favorites, and download materials for offline access.
           </p>
           <Link to="/library">
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-teal-600">
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-sage-600">
               Explore the Resource Library
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
@@ -268,7 +268,7 @@ export function EducationalResources() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/library">
-              <Button size="lg" className="bg-teal-600 hover:bg-teal-700">
+              <Button size="lg" className="bg-sage-600 hover:bg-sage-700">
                 Browse Library
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -277,7 +277,7 @@ export function EducationalResources() {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-teal-600 text-teal-600 hover:bg-teal-50"
+                className="border-sage-600 text-sage-600 hover:bg-sage-50"
               >
                 Contact Us
               </Button>

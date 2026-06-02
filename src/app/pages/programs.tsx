@@ -81,7 +81,7 @@ export function Programs() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-teal-50 to-blue-50 py-20">
+      <section className="bg-gradient-to-br from-sage-50 to-sage-50 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -131,8 +131,8 @@ export function Programs() {
                   className="border-gray-200 hover:shadow-lg transition-shadow"
                 >
                   <CardHeader>
-                    <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mb-4">
-                      <Icon className="h-6 w-6 text-teal-600" />
+                    <div className="w-12 h-12 bg-sage-100 rounded-lg flex items-center justify-center mb-4">
+                      <Icon className="h-6 w-6 text-sage-600" />
                     </div>
                     <CardTitle className="text-xl text-gray-900">
                       {program.title}
@@ -150,7 +150,7 @@ export function Programs() {
                             key={idx}
                             className="text-sm text-gray-600 flex items-start"
                           >
-                            <span className="text-teal-600 mr-2">•</span>
+                            <span className="text-sage-600 mr-2">•</span>
                             <span>{topic}</span>
                           </li>
                         ))}
@@ -184,7 +184,7 @@ export function Programs() {
               cultural contexts, and personal values.
             </p>
             <p>
-              We emphasize empowerment through education—helping individuals and
+              We emphasize empowerment through education, helping individuals and
               families make informed decisions, access appropriate resources,
               and develop strategies that work for their specific situations.
             </p>
@@ -199,12 +199,12 @@ export function Programs() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-teal-600 text-white">
+      <section className="py-20 bg-sage-600 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl lg:text-4xl mb-6">
             Interested in Our Programs?
           </h2>
-          <p className="text-xl text-teal-50 mb-8">
+          <p className="text-xl text-sage-50 mb-8">
             Explore our resources or reach out to learn more about how our
             educational initiatives can support you or your loved ones.
           </p>

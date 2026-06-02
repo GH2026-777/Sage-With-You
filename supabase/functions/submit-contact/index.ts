@@ -1,21 +1,21 @@
 /**
  * One request: validate → insert `contact_submissions` (service role) → O365 SMTP confirmation to visitor.
- * No third-party mail APIs — same pattern as Hapmetry (denomailer + Microsoft 365).
+ * No third-party mail APIs - same pattern as Hapmetry (denomailer + Microsoft 365).
  *
  * Source file on disk (repo): `Sage With You/supabase/functions/submit-contact/index.ts`
- * — The parent folder name has a space, so Cursor @-mentions like `@Sage With You/...` often do not resolve;
+ * - The parent folder name has a space, so Cursor @-mentions like `@Sage With You/...` often do not resolve;
  *   attach context with `@submit-contact` / search `submit-contact`, or open this path from the file tree.
  *
  * Secrets (Supabase → Edge Functions → Secrets):
- *   CONTACT_SMTP_HOST   — default smtp.office365.com
- *   CONTACT_SMTP_PORT   — default 587
- *   CONTACT_SMTP_USER   — mailbox sign-in
- *   CONTACT_SMTP_PASS   — app password or credential
- *   CONTACT_SMTP_FROM   — e.g. "Sage With You <noreply@yourdomain.com>"
+ *   CONTACT_SMTP_HOST   - default smtp.office365.com
+ *   CONTACT_SMTP_PORT   - default 587
+ *   CONTACT_SMTP_USER   - mailbox sign-in
+ *   CONTACT_SMTP_PASS   - app password or credential
+ *   CONTACT_SMTP_FROM   - e.g. "Sage With You <noreply@yourdomain.com>"
  * Optional:
- *   CONTACT_SMTP_BCC    — e.g. info@sageelan.org (internal copy)
- *   CONTACT_RATE_SALT   — secret for hashing client IP (set in prod)
- *   CONTACT_RATE_LIMIT_PER_HOUR — default 25 submissions per hashed client per hour
+ *   CONTACT_SMTP_BCC    - e.g. info@sageelan.org (internal copy)
+ *   CONTACT_RATE_SALT   - secret for hashing client IP (set in prod)
+ *   CONTACT_RATE_LIMIT_PER_HOUR - default 25 submissions per hashed client per hour
  *
  * Run migration `004_contact_submit_rate_limit.sql` for table `contact_submit_client_events`.
  *
@@ -113,7 +113,7 @@ async function sendConfirmationSmtp(
     await client.send({
       from,
       to,
-      subject: `We received your message — ${subjectLine.slice(0, 80)}${subjectLine.length > 80 ? "…" : ""}`,
+      subject: `We received your message: ${subjectLine.slice(0, 80)}${subjectLine.length > 80 ? "…" : ""}`,
       content: plain,
       html,
       ...(bcc ? { bcc } : {}),

@@ -3,7 +3,7 @@
  * Body: { "confirmEmail": "<must match signed-in user email>" }.
  *
  * Source file on disk (repo): `Sage With You/supabase/functions/delete-account/index.ts`
- * — Parent folder has a space; use @-mention `delete-account` or Explorer if `@Sage With You/...` fails.
+ * - Parent folder has a space; use @-mention `delete-account` or Explorer if `@Sage With You/...` fails.
  *
  * Secrets: SUPABASE_SERVICE_ROLE_KEY (auto on Supabase), SUPABASE_URL, SUPABASE_ANON_KEY.
  *

@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { Shield } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { BackToHomeLink } from "../components/BackToHome";
 
 /**
  * Privacy policy for Sage With You (SageÉlan Foundation, Inc.).
@@ -11,9 +12,9 @@ const LAST_UPDATED = "January 18, 2026";
 export function Privacy() {
   return (
     <div>
-      <section className="bg-gradient-to-br from-teal-50 to-blue-50 py-16">
+      <section className="bg-gradient-to-br from-sage-50 to-sage-50 py-16">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3 text-teal-700 mb-4">
+          <div className="flex items-center gap-3 text-sage-700 mb-4">
             <Shield className="h-10 w-10 shrink-0" aria-hidden />
             <h1 className="text-4xl font-semibold text-gray-900">Privacy Policy</h1>
           </div>
@@ -35,7 +36,7 @@ export function Privacy() {
             <CardContent className="space-y-3 text-sm text-gray-700 leading-relaxed">
               <p>
                 We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose,
-                and safeguard your information when you use Sage With You — including educational pages, the resource
+                and safeguard your information when you use Sage With You, including educational pages, the resource
                 library, optional assessments, account features, and the contact form.
               </p>
             </CardContent>
@@ -72,7 +73,7 @@ export function Privacy() {
                 <h3 className="font-semibold text-gray-900 mb-2">Usage data</h3>
                 <p>
                   We automatically collect information about your interactions with our site, including pages visited,
-                  features used, and timestamps — for example through server logs and, if you accept optional analytics
+                  features used, and timestamps, for example through server logs and, if you accept optional analytics
                   cookies, through measurement tools we may enable in the future under the same cookie choice.
                 </p>
               </div>
@@ -162,7 +163,7 @@ export function Privacy() {
                 <li>Withdraw consent for optional processing where consent is the legal basis</li>
                 <li>
                   Adjust cookie preferences on{" "}
-                  <Link to="/account#cookies" className="text-teal-700 font-medium hover:underline">
+                  <Link to="/account#cookies" className="text-sage-700 font-medium hover:underline">
                     Account → Cookies
                   </Link>
                 </li>
@@ -215,7 +216,7 @@ export function Privacy() {
                   <li>Verify eligibility to use the platform</li>
                 </ul>
               </div>
-              <div className="rounded-lg border-l-4 border-teal-600 bg-teal-50 p-4">
+              <div className="rounded-lg border-l-4 border-sage-600 bg-sage-50 p-4">
                 <p className="font-semibold text-gray-900 mb-1">Important</p>
                 <p>
                   If we discover or are notified that a user is under 18 years of age, we may terminate the account and
@@ -224,7 +225,7 @@ export function Privacy() {
               </div>
               <p>
                 If you believe a minor has provided personal information, contact us immediately at{" "}
-                <a href="mailto:info@sageelan.org" className="text-teal-700 font-medium hover:underline">
+                <a href="mailto:info@sageelan.org" className="text-sage-700 font-medium hover:underline">
                   info@sageelan.org
                 </a>
                 .
@@ -265,13 +266,13 @@ export function Privacy() {
               <p>If you have questions about this Privacy Policy or our data practices, please contact us at:</p>
               <p>
                 Email:{" "}
-                <a href="mailto:info@sageelan.org" className="text-teal-700 font-medium hover:underline">
+                <a href="mailto:info@sageelan.org" className="text-sage-700 font-medium hover:underline">
                   info@sageelan.org
                 </a>
               </p>
               <p>
                 Or use our{" "}
-                <Link to="/contact" className="text-teal-700 font-medium hover:underline">
+                <Link to="/contact" className="text-sage-700 font-medium hover:underline">
                   contact form
                 </Link>
                 .
@@ -280,11 +281,9 @@ export function Privacy() {
           </Card>
 
           <p className="text-sm text-gray-500">
-            <Link to="/" className="text-teal-700 hover:underline">
-              ← Back to home
-            </Link>
+            <BackToHomeLink preferHistoryBack={false} />
             {" · "}
-            <Link to="/terms" className="text-teal-700 hover:underline">
+            <Link to="/terms" className="text-sage-700 hover:underline">
               Terms of Service
             </Link>
           </p>

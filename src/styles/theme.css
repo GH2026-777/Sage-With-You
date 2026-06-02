@@ -2,20 +2,26 @@
 
 :root {
   --font-size: 16px;
+  --brand-deep: #3c5e74;
+  --brand-primary: #4e83aa;
+  --brand-mist: #d0e5f2;
+  --brand-sky: #68a3c9;
+  --brand-ink: #10191f;
+  --brand-neutral: #919191;
   --background: #ffffff;
-  --foreground: oklch(0.145 0 0);
+  --foreground: var(--brand-ink);
   --card: #ffffff;
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: #030213;
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.95 0.0058 264.53);
-  --secondary-foreground: #030213;
-  --muted: #ececf0;
-  --muted-foreground: #717182;
-  --accent: #e9ebef;
-  --accent-foreground: #030213;
+  --card-foreground: var(--brand-ink);
+  --popover: #ffffff;
+  --popover-foreground: var(--brand-ink);
+  --primary: var(--brand-primary);
+  --primary-foreground: #ffffff;
+  --secondary: var(--brand-mist);
+  --secondary-foreground: var(--brand-ink);
+  --muted: var(--brand-mist);
+  --muted-foreground: var(--brand-neutral);
+  --accent: var(--brand-mist);
+  --accent-foreground: var(--brand-deep);
   --destructive: #d4183d;
   --destructive-foreground: #ffffff;
   --border: rgba(0, 0, 0, 0.1);
@@ -79,6 +85,18 @@
 }
 
 @theme inline {
+  --color-sage-50: #d0e5f2;
+  --color-sage-100: #d0e5f2;
+  --color-sage-200: #b8d4e8;
+  --color-sage-300: #68a3c9;
+  --color-sage-400: #68a3c9;
+  --color-sage-500: #68a3c9;
+  --color-sage-600: #4e83aa;
+  --color-sage-700: #3c5e74;
+  --color-sage-800: #3c5e74;
+  --color-sage-900: #10191f;
+  --color-sage-950: #10191f;
+  --color-brand-neutral: #919191;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);

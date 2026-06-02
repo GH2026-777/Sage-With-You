@@ -282,7 +282,7 @@ function ResourcePrimaryButton({ resource }: { resource: Resource }) {
       resource.type === "checklist" ||
       (resource.type === "guide" && resource.format === "PDF");
     return (
-      <Button asChild className="w-full bg-teal-600 hover:bg-teal-700">
+      <Button asChild className="w-full bg-sage-600 hover:bg-sage-700">
         <a
           href={resource.fileUrl}
           target="_blank"
@@ -326,18 +326,18 @@ function LibraryResourceCard({
     <Card className="border-gray-200 hover:shadow-lg transition-shadow">
       <CardHeader>
         <div className="flex items-start justify-between mb-2">
-          <div className="flex items-center gap-2 text-teal-600">
+          <div className="flex items-center gap-2 text-sage-600">
             {getTypeIcon(resource.type)}
             <span className="text-sm font-medium">{getTypeLabel(resource.type)}</span>
           </div>
           <button
             type="button"
             onClick={onToggleSaved}
-            className="text-gray-400 hover:text-teal-600 transition-colors"
+            className="text-gray-400 hover:text-sage-600 transition-colors"
             aria-label={isSaved ? "Remove from saved" : "Save resource"}
           >
             {isSaved ? (
-              <BookmarkCheck className="h-5 w-5 fill-teal-600 text-teal-600" />
+              <BookmarkCheck className="h-5 w-5 fill-sage-600 text-sage-600" />
             ) : (
               <BookmarkPlus className="h-5 w-5" />
             )}
@@ -442,7 +442,7 @@ export function Library() {
 
   return (
     <div>
-      <section className="bg-gradient-to-br from-teal-50 to-blue-50 py-20">
+      <section className="bg-gradient-to-br from-sage-50 to-sage-50 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <h1 className="text-4xl lg:text-5xl mb-6 text-gray-900">Resource Library</h1>
@@ -487,7 +487,7 @@ export function Library() {
                 <Button
                   variant={showSavedOnly ? "default" : "outline"}
                   onClick={() => setShowSavedOnly(!showSavedOnly)}
-                  className={showSavedOnly ? "bg-teal-600 hover:bg-teal-700" : ""}
+                  className={showSavedOnly ? "bg-sage-600 hover:bg-sage-700" : ""}
                 >
                   <BookmarkCheck className="h-4 w-4 mr-2" />
                   Saved ({savedResources.size})
@@ -595,12 +595,12 @@ export function Library() {
       </section>
 
       {savedResources.size > 0 && (
-        <section className="py-12 bg-teal-50">
+        <section className="py-12 bg-sage-50">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <Card className="border-teal-200">
+            <Card className="border-sage-200">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <BookmarkCheck className="h-6 w-6 text-teal-600" />
+                  <BookmarkCheck className="h-6 w-6 text-sage-600" />
                   Your Saved Resources ({savedResources.size})
                 </CardTitle>
               </CardHeader>
@@ -611,7 +611,7 @@ export function Library() {
                 </p>
                 <Button
                   onClick={() => setShowSavedOnly(true)}
-                  className="bg-teal-600 hover:bg-teal-700"
+                  className="bg-sage-600 hover:bg-sage-700"
                 >
                   View Saved Resources
                 </Button>

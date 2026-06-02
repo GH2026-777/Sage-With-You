@@ -20,7 +20,7 @@ export type SeoEntry = {
 const DEFAULT: SeoEntry = {
   title: "Sage With You",
   description:
-    "Evidence-informed guidance for aging in place, caregivers, and home wellbeing — Sage With You by SageÉlan Foundation.",
+    "Evidence-informed guidance for aging in place, caregivers, and home wellbeing. Sage With You by SageÉlan Foundation.",
 };
 
 /** Longest paths first for prefix matching where needed. */

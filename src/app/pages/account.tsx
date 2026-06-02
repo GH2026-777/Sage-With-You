@@ -41,7 +41,7 @@ type CommPrefs = {
 };
 
 function formatJoined(iso: string | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return "N/A";
   try {
     return new Date(iso).toLocaleDateString(undefined, {
       year: "numeric",
@@ -49,7 +49,7 @@ function formatJoined(iso: string | undefined): string {
       day: "numeric",
     });
   } catch {
-    return "—";
+    return "N/A";
   }
 }
 
@@ -216,11 +216,11 @@ export function Account() {
 
   return (
     <div className="pb-16">
-      <section className="bg-gradient-to-br from-teal-50 to-blue-50 py-12 md:py-16">
+      <section className="bg-gradient-to-br from-sage-50 to-sage-50 py-12 md:py-16">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div className="flex items-start gap-4">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-teal-600 text-white shadow-md">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-sage-600 text-white shadow-md">
                 <User className="h-7 w-7" aria-hidden />
               </div>
               <div>
@@ -229,7 +229,7 @@ export function Account() {
                 </h1>
                 <p className="mt-2 max-w-2xl text-gray-700">
                   {signedIn
-                    ? "Profile, cookies, email preferences, and security — aligned with other SageÉlan sites (shared cookie_consent storage)."
+                    ? "Profile, cookies, email preferences, and security, aligned with other SageÉlan sites (shared cookie_consent storage)."
                     : "Cookie choices on this device. Sign in to sync email preferences to your profile."}
                 </p>
                 {signedIn && sessionEmail && (
@@ -243,7 +243,7 @@ export function Account() {
             </div>
             {signedIn && (
               <div className="flex shrink-0 flex-wrap gap-2 md:justify-end">
-                <Button type="button" className="bg-teal-600 hover:bg-teal-700" onClick={() => void persist()}>
+                <Button type="button" className="bg-sage-600 hover:bg-sage-700" onClick={() => void persist()}>
                   Save changes
                 </Button>
                 <Button type="button" variant="outline" className="border-gray-300" onClick={() => void signOut()}>
@@ -258,7 +258,7 @@ export function Account() {
 
       <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
         {savedFlash && (
-          <p className="mb-6 rounded-lg border border-teal-200 bg-teal-50 px-4 py-3 text-sm text-teal-900">
+          <p className="mb-6 rounded-lg border border-sage-200 bg-sage-50 px-4 py-3 text-sm text-sage-900">
             Your settings were saved.
           </p>
         )}
@@ -276,7 +276,7 @@ export function Account() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex flex-wrap gap-3">
-                <Button asChild className="bg-teal-600 hover:bg-teal-700">
+                <Button asChild className="bg-sage-600 hover:bg-sage-700">
                   <Link to="/login">Sign in</Link>
                 </Button>
                 <Button asChild variant="outline" className="border-gray-300">
@@ -287,7 +287,7 @@ export function Account() {
             <Card className={cardClass} id="cookies">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Cookie className="h-5 w-5 text-teal-600" />
+                  <Cookie className="h-5 w-5 text-sage-600" />
                   Cookies
                 </CardTitle>
                 <CardDescription>
@@ -297,7 +297,7 @@ export function Account() {
               </CardHeader>
               <CardContent className="space-y-3">{cookieRadios(cookiePref, setCookiePref)}</CardContent>
             </Card>
-            <Button type="button" className="bg-teal-600 hover:bg-teal-700" onClick={() => void persist()}>
+            <Button type="button" className="bg-sage-600 hover:bg-sage-700" onClick={() => void persist()}>
               Save cookie choice
             </Button>
           </div>
@@ -338,7 +338,7 @@ export function Account() {
                           <Mail className="h-3.5 w-3.5" />
                           Email
                         </dt>
-                        <dd className="mt-1 font-medium text-gray-900 break-all">{sessionEmail ?? "—"}</dd>
+                        <dd className="mt-1 font-medium text-gray-900 break-all">{sessionEmail ?? "N/A"}</dd>
                       </div>
                       <div className="rounded-lg border border-gray-100 bg-gray-50/80 p-4">
                         <dt className="text-gray-500">Member since</dt>
@@ -355,11 +355,11 @@ export function Account() {
                     <CardTitle>Cookies &amp; privacy</CardTitle>
                     <CardDescription>
                       Controls the site banner and optional analytics when added. Full details:{" "}
-                      <Link to="/privacy" className="font-medium text-teal-700 hover:underline">
+                      <Link to="/privacy" className="font-medium text-sage-700 hover:underline">
                         Privacy policy
                       </Link>
                       . Questions?{" "}
-                      <Link to="/contact" className="font-medium text-teal-700 hover:underline">
+                      <Link to="/contact" className="font-medium text-sage-700 hover:underline">
                         Contact us
                       </Link>
                       .
@@ -520,7 +520,7 @@ function cookieRadios(cookiePref: CookiePref, setCookiePref: (v: CookiePref) => 
       ).map(({ value, label, hint }) => (
         <label
           key={String(value)}
-          className="flex cursor-pointer items-start gap-3 rounded-lg border border-gray-200 bg-white p-4 has-[:checked]:border-teal-400 has-[:checked]:ring-1 has-[:checked]:ring-teal-200"
+          className="flex cursor-pointer items-start gap-3 rounded-lg border border-gray-200 bg-white p-4 has-[:checked]:border-sage-400 has-[:checked]:ring-1 has-[:checked]:ring-sage-200"
         >
           <input
             type="radio"
@@ -535,7 +535,7 @@ function cookieRadios(cookiePref: CookiePref, setCookiePref: (v: CookiePref) => 
           </span>
         </label>
       ))}
-      <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-gray-200 bg-white p-4 has-[:checked]:border-teal-400 has-[:checked]:ring-1 has-[:checked]:ring-teal-200">
+      <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-gray-200 bg-white p-4 has-[:checked]:border-sage-400 has-[:checked]:ring-1 has-[:checked]:ring-sage-200">
         <input
           type="radio"
           name="cookie-pref"
@@ -576,7 +576,7 @@ function ToggleRow({
         role="switch"
         aria-checked={on}
         onClick={onToggle}
-        className={`relative h-7 w-12 shrink-0 rounded-full transition-colors ${on ? "bg-teal-600" : "bg-gray-300"}`}
+        className={`relative h-7 w-12 shrink-0 rounded-full transition-colors ${on ? "bg-sage-600" : "bg-gray-300"}`}
       >
         <span
           className={`absolute top-0.5 h-6 w-6 rounded-full bg-white shadow transition-transform ${

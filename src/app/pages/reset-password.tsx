@@ -5,6 +5,8 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { supabase } from '../../utils/supabase';
+import { AuthBrandHeader } from '../components/AuthBrandHeader';
+import { authErrorMessage } from '../../utils/authErrorMessage';
 
 export function ResetPassword() {
   const navigate = useNavigate();
@@ -57,7 +59,10 @@ export function ResetPassword() {
       }, 3000);
     } catch (error: unknown) {
       setError(
-        error instanceof Error ? error.message : "Failed to reset password. Please try again.",
+        authErrorMessage(
+          error,
+          'Failed to reset password. Please try again.',
+        ),
       );
     } finally {
       setIsLoading(false);
@@ -66,10 +71,10 @@ export function ResetPassword() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-teal-50 via-blue-50 to-teal-50 flex items-center justify-center px-4 py-12">
+      <div className="min-h-screen bg-gradient-to-br from-sage-50 via-sage-50 to-sage-50 flex items-center justify-center px-4 py-12">
         <Card className="w-full max-w-md border-gray-200 shadow-xl">
           <CardContent className="pt-6 text-center">
-            <CheckCircle className="h-16 w-16 text-teal-600 mx-auto mb-4" />
+            <CheckCircle className="h-16 w-16 text-sage-600 mx-auto mb-4" />
             <h2 className="text-2xl font-semibold text-gray-900 mb-2">
               Password Reset Successful!
             </h2>
@@ -86,17 +91,10 @@ export function ResetPassword() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-blue-50 to-teal-50 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-sage-50 via-sage-50 to-sage-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
-        {/* Logo/Branding */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-semibold text-teal-600 mb-2">
-            SageÉlan Foundation
-          </h1>
-          <p className="text-gray-600">Sage With You - Living in Place</p>
-        </div>
-
-        <Card className="border-gray-200 shadow-xl">
+        <Card className="border-gray-200 shadow-xl overflow-hidden">
+          <AuthBrandHeader />
           <CardHeader>
             <CardTitle className="text-2xl text-center text-gray-900">
               Set New Password
@@ -157,7 +155,7 @@ export function ResetPassword() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-teal-600 hover:bg-teal-700 text-white"
+                className="w-full bg-sage-600 hover:bg-sage-700 text-white"
               >
                 {isLoading ? 'Resetting password...' : 'Reset Password'}
               </Button>

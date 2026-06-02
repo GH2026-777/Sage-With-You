@@ -28,17 +28,15 @@ if exist ".env" (
 )
 echo.
 
-REM Clean old build files
+REM Clean old build output only
 echo [2/7] Cleaning old build files...
-if exist "node_modules" rmdir /s /q "node_modules"
 if exist "dist" rmdir /s /q "dist"
-if exist "package-lock.json" del /f /q "package-lock.json"
 echo    Clean complete
 echo.
 
 REM Install dependencies
 echo [3/7] Installing dependencies...
-call npm install
+call npm ci
 if errorlevel 1 (
     echo ERROR: npm install failed!
     echo Make sure Node.js and npm are installed.
@@ -139,52 +137,38 @@ echo ============================================
 echo IMPORTANT CONFIGURATION NOTES:
 echo ============================================
 echo.
-echo PASSWORD GATE (Staging Protection):
-echo   - Status: ENABLED
-echo   - Password: SageElan2026
-echo   - Session: 24 hours
-echo   - To disable: Set ENABLE_PASSWORD_GATE = false in
-echo     src/app/components/PasswordGate.tsx
+echo PASSWORD GATE (staging / UAT):
+echo   - ON by default (set VITE_ENABLE_PASSWORD_GATE=false for public go-live)
+echo   - Password: VITE_STAGING_GATE_PASSWORD in .env / .env.production
+echo   - While gate is ON, all pages use noindex for crawlers
 echo.
-echo AUTHENTICATION SYSTEM:
-echo   - Type: Mock Supabase Client (localStorage-based)
-echo   - No database required for staging
-echo   - Test accounts work in browser localStorage
-echo   - To connect real Supabase: Follow in-app prompts
+echo AUTHENTICATION:
+echo   - Supabase email + password (sign-in, join, reset, account delete)
+echo   - Requires VITE_SUPABASE_* at build time
+echo.
+echo CONTACT FORM:
+echo   - Edge Function submit-contact + O365 SMTP (see docs/SUPABASE_OPS_CHECKLIST.md)
 echo.
 echo ROUTING:
-echo   - Multi-page React Router setup
-echo   - .htaccess configured for clean URLs
-echo   - All routes will work after deployment
+echo   - React Router + .htaccess in dist/
 echo.
 echo PAGES INCLUDED:
-echo   - Home
-echo   - About
-echo   - Programs
-echo   - Resources (with dashboard)
-echo   - Contact
-echo   - Login/Signup/Forgot Password/Reset Password
+echo   - Home, About, Programs, Resources, Assessments, Library, Contact, Account
+echo   - Login, Join, Forgot/Reset password, Privacy, Terms
 echo.
 echo FEATURES:
-echo   - Interactive self-assessment tools
-echo   - Accessibility enhancements
-echo   - Resource library with planning dashboard
-echo   - Full authentication flow (mock)
-echo   - Password-protected staging access
+echo   - Self-assessment tools, accessibility widget, cookie consent
+echo   - Optional library Storage, PWA manifest
 echo.
 echo ============================================
 echo TESTING CHECKLIST AFTER DEPLOYMENT:
 echo ============================================
 echo.
-echo [ ] Site loads with password gate
-echo [ ] Enter password: SageElan2026
-echo [ ] Navigate to all pages (Home, About, Programs, etc.)
-echo [ ] Test authentication (Login/Signup)
-echo [ ] Test self-assessment tools
-echo [ ] Test resource library and dashboard
-echo [ ] Check mobile responsiveness
-echo [ ] Verify all images load correctly
-echo [ ] Test contact form
+echo [ ] Site loads with staging gate (if enabled)
+echo [ ] Sign up, confirm email, sign in
+echo [ ] Contact form + confirmation email
+echo [ ] Navigate all main pages
+echo [ ] Mobile responsiveness
 echo.
 echo ============================================
 echo.

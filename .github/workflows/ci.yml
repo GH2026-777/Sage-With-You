@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [main, master]
 
+env:
+  VITE_SUPABASE_URL: https://htckswutkpktxclyijwk.supabase.co
+  # Public anon key (safe in CI). Override via repo secret if you rotate keys.
+  VITE_SUPABASE_ANON_KEY: ci-build-placeholder-anon-key
+  VITE_ENABLE_PASSWORD_GATE: "false"
+
 jobs:
   lint-typecheck-test-build:
     runs-on: ubuntu-latest

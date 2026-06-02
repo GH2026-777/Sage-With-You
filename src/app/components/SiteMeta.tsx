@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router";
 import { fullTitle, getSeoForPath, ogImageAbsoluteUrl, siteOrigin } from "../../lib/siteSeo";
+import { shouldNoindexForStaging } from "../../lib/staging-gate";
 
 function upsertMeta(attr: "name" | "property", key: string, content: string) {
   const sel = `meta[${attr}="${key.replace(/"/g, "")}"]`;
@@ -39,7 +40,8 @@ export function SiteMeta() {
     upsertMeta("name", "twitter:description", seo.description);
     upsertMeta("name", "twitter:image", ogImage);
 
-    const robots = seo.noindex ? "noindex, nofollow" : "index, follow";
+    const robots =
+      seo.noindex || shouldNoindexForStaging() ? "noindex, nofollow" : "index, follow";
     upsertMeta("name", "robots", robots);
   }, [pathname]);
 

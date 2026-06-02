@@ -268,9 +268,9 @@ export function Assessments() {
     } else if (percentage >= 60) {
       return {
         level: "Good",
-        color: "text-teal-600",
-        bgColor: "bg-teal-50",
-        borderColor: "border-teal-200",
+        color: "text-sage-600",
+        bgColor: "bg-sage-50",
+        borderColor: "border-sage-200",
         message:
           "You're on the right track. Consider reviewing the areas that scored lower and explore our resources for improvement.",
       };
@@ -306,7 +306,7 @@ export function Assessments() {
     return (
       <div>
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-teal-50 to-blue-50 py-20">
+        <section className="bg-gradient-to-br from-sage-50 to-sage-50 py-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl">
               <h1 className="text-4xl lg:text-5xl mb-6 text-gray-900">
@@ -333,8 +333,8 @@ export function Assessments() {
                     className="border-gray-200 hover:shadow-lg transition-shadow"
                   >
                     <CardHeader>
-                      <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mb-4">
-                        <Icon className="h-6 w-6 text-teal-600" />
+                      <div className="w-12 h-12 bg-sage-100 rounded-lg flex items-center justify-center mb-4">
+                        <Icon className="h-6 w-6 text-sage-600" />
                       </div>
                       <CardTitle className="text-xl text-gray-900">
                         {assessment.title}
@@ -350,7 +350,7 @@ export function Assessments() {
                       </p>
                       <Button
                         onClick={() => setActiveAssessment(assessment.id)}
-                        className="w-full bg-teal-600 hover:bg-teal-700"
+                        className="w-full bg-sage-600 hover:bg-sage-700"
                       >
                         Start Assessment
                         <ChevronRight className="ml-2 h-4 w-4" />
@@ -401,7 +401,7 @@ export function Assessments() {
             <CardContent className="space-y-6">
               {/* Score Display */}
               <div className="text-center py-8">
-                <div className="text-6xl font-bold text-teal-600 mb-2">
+                <div className="text-6xl font-bold text-sage-600 mb-2">
                   {score.percentage}%
                 </div>
                 <div className="text-xl text-gray-700">
@@ -426,26 +426,26 @@ export function Assessments() {
                 </h3>
                 <ul className="space-y-2 text-gray-700">
                   <li className="flex items-start">
-                    <ChevronRight className="h-5 w-5 text-teal-600 mr-2 flex-shrink-0 mt-0.5" />
+                    <ChevronRight className="h-5 w-5 text-sage-600 mr-2 flex-shrink-0 mt-0.5" />
                     <span>
                       Review our Resources page for detailed guides and tools
                     </span>
                   </li>
                   <li className="flex items-start">
-                    <ChevronRight className="h-5 w-5 text-teal-600 mr-2 flex-shrink-0 mt-0.5" />
+                    <ChevronRight className="h-5 w-5 text-sage-600 mr-2 flex-shrink-0 mt-0.5" />
                     <span>
                       Explore our Programs to find educational support
                     </span>
                   </li>
                   <li className="flex items-start">
-                    <ChevronRight className="h-5 w-5 text-teal-600 mr-2 flex-shrink-0 mt-0.5" />
+                    <ChevronRight className="h-5 w-5 text-sage-600 mr-2 flex-shrink-0 mt-0.5" />
                     <span>
                       Consider sharing these results with healthcare providers
                       or family members
                     </span>
                   </li>
                   <li className="flex items-start">
-                    <ChevronRight className="h-5 w-5 text-teal-600 mr-2 flex-shrink-0 mt-0.5" />
+                    <ChevronRight className="h-5 w-5 text-sage-600 mr-2 flex-shrink-0 mt-0.5" />
                     <span>
                       Contact us if you need personalized guidance
                     </span>
@@ -464,7 +464,7 @@ export function Assessments() {
                 </Button>
                 <Button
                   onClick={() => window.print()}
-                  className="flex-1 bg-teal-600 hover:bg-teal-700"
+                  className="flex-1 bg-sage-600 hover:bg-sage-700"
                 >
                   Print Results
                 </Button>
@@ -511,7 +511,7 @@ export function Assessments() {
                 (option) => (
                   <div
                     key={option.value}
-                    className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-teal-50 hover:border-teal-300 transition-colors cursor-pointer"
+                    className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-sage-50 hover:border-sage-300 transition-colors cursor-pointer"
                   >
                     <RadioGroupItem
                       value={option.value}
@@ -540,7 +540,7 @@ export function Assessments() {
               <Button
                 onClick={handleNext}
                 disabled={!answers[currentQuestion]}
-                className="flex-1 bg-teal-600 hover:bg-teal-700"
+                className="flex-1 bg-sage-600 hover:bg-sage-700"
               >
                 {currentAssessmentData &&
                 currentQuestion ===

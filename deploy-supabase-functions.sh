@@ -27,18 +27,22 @@ run_sb() {
   fi
 }
 
-echo "[1/3] Checking Supabase login (project ref: ${PROJECT_REF})..."
+echo "[1/4] Checking Supabase login (project ref: ${PROJECT_REF})..."
 if ! run_sb projects list >/dev/null 2>&1; then
   echo ""
   echo "Not logged in. A browser window may open — complete sign-in, then continue."
   run_sb login
 fi
 
-echo "[2/3] Deploying submit-contact..."
+echo "[2/4] Deploying submit-contact..."
 run_sb functions deploy submit-contact --project-ref "${PROJECT_REF}"
 
-echo "[3/3] Deploying delete-account..."
+echo "[3/4] Deploying delete-account..."
 run_sb functions deploy delete-account --project-ref "${PROJECT_REF}"
 
+echo "[4/4] Deploying auth-send-email (sign-up confirmation; enable Send Email hook in Dashboard)..."
+run_sb functions deploy auth-send-email --no-verify-jwt --project-ref "${PROJECT_REF}"
+
 echo ""
-echo "Done. (submit-contact, delete-account)"
+echo "Done. (submit-contact, delete-account, auth-send-email)"
+echo "Next: Dashboard → Authentication → Auth Hooks → Send Email → HTTPS hook URL."

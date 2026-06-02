@@ -113,7 +113,7 @@ export function Contact() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-teal-50 to-blue-50 py-20">
+      <section className="bg-gradient-to-br from-sage-50 to-sage-50 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <h1 className="text-4xl lg:text-5xl mb-6 text-gray-900">
@@ -140,13 +140,13 @@ export function Contact() {
                   className="border-gray-200 text-center hover:shadow-lg transition-shadow"
                 >
                   <CardContent className="pt-6">
-                    <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                      <Icon className="h-6 w-6 text-teal-600" />
+                    <div className="w-12 h-12 bg-sage-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                      <Icon className="h-6 w-6 text-sage-600" />
                     </div>
                     <h3 className="text-lg font-medium text-gray-900 mb-2">
                       {info.title}
                     </h3>
-                    <p className="text-teal-600 font-medium mb-2">
+                    <p className="text-sage-600 font-medium mb-2">
                       {info.content}
                     </p>
                     <p className="text-sm text-gray-600">{info.description}</p>
@@ -165,9 +165,9 @@ export function Contact() {
                 </h2>
 
                 {submitted ? (
-                  <div className="bg-teal-50 border border-teal-200 rounded-lg p-8 text-center">
-                    <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Heart className="h-8 w-8 text-teal-600 fill-teal-600" />
+                  <div className="bg-sage-50 border border-sage-200 rounded-lg p-8 text-center">
+                    <div className="w-16 h-16 bg-sage-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Heart className="h-8 w-8 text-sage-600 fill-sage-600" />
                     </div>
                     <h3 className="text-xl mb-2 text-gray-900">
                       Thank You!
@@ -183,7 +183,7 @@ export function Contact() {
                     {confirmationEmailSent === false && (
                       <p className="text-amber-800 text-sm mb-6 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
                         Your message was saved successfully, but we could not send a confirmation email this time. If you need a record of what you sent, use &quot;Send another message&quot; below or contact us at{" "}
-                        <a href="mailto:info@sageelan.org" className="text-teal-700 underline font-medium">
+                        <a href="mailto:info@sageelan.org" className="text-sage-700 underline font-medium">
                           info@sageelan.org
                         </a>
                         .
@@ -192,7 +192,7 @@ export function Contact() {
                     <Button
                       type="button"
                       variant="outline"
-                      className="mt-6 border-teal-600 text-teal-700 hover:bg-teal-50"
+                      className="mt-6 border-sage-600 text-sage-700 hover:bg-sage-50"
                       onClick={resetToForm}
                     >
                       Send another message
@@ -288,7 +288,7 @@ export function Contact() {
                         type="submit"
                         size="lg"
                         disabled={isSubmitting}
-                        className="bg-teal-600 hover:bg-teal-700"
+                        className="bg-sage-600 hover:bg-sage-700"
                       >
                         {isSubmitting ? "Sending…" : "Send Message"}
                       </Button>

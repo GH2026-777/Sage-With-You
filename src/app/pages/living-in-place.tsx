@@ -89,12 +89,12 @@ export function LivingInPlace() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-teal-50 to-blue-50 py-20">
+      <section className="bg-gradient-to-br from-sage-50 to-sage-50 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-14 h-14 bg-teal-600 rounded-lg flex items-center justify-center">
+                <div className="w-14 h-14 bg-sage-600 rounded-lg flex items-center justify-center">
                   <Home className="h-7 w-7 text-white" />
                 </div>
                 <h1 className="text-4xl lg:text-5xl text-gray-900">
@@ -105,7 +105,7 @@ export function LivingInPlace() {
                 "Living in place" means remaining in your own home and community as you age, with the support, modifications, and resources needed to maintain independence, safety, and quality of life.
               </p>
               <p className="text-lg text-gray-600 leading-relaxed">
-                It's about more than just staying put—it's about thriving where you are, on your own terms.
+                It's about more than just staying put. It's about thriving where you are, on your own terms.
               </p>
             </div>
             <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
@@ -137,8 +137,8 @@ export function LivingInPlace() {
               return (
                 <Card key={index} className="border-gray-200 hover:shadow-lg transition-shadow">
                   <CardHeader>
-                    <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mb-4">
-                      <Icon className="h-6 w-6 text-teal-600" />
+                    <div className="w-12 h-12 bg-sage-100 rounded-lg flex items-center justify-center mb-4">
+                      <Icon className="h-6 w-6 text-sage-600" />
                     </div>
                     <CardTitle className="text-xl text-gray-900">
                       {benefit.title}
@@ -178,7 +178,7 @@ export function LivingInPlace() {
                   <ul className="space-y-3">
                     {component.items.map((item, i) => (
                       <li key={i} className="flex items-start gap-3">
-                        <CheckCircle className="h-5 w-5 text-teal-600 flex-shrink-0 mt-0.5" />
+                        <CheckCircle className="h-5 w-5 text-sage-600 flex-shrink-0 mt-0.5" />
                         <span className="text-gray-600">{item}</span>
                       </li>
                     ))}
@@ -207,8 +207,8 @@ export function LivingInPlace() {
               <Card key={index} className="border-gray-200">
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-xl font-semibold text-teal-600">
+                    <div className="w-12 h-12 bg-sage-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-xl font-semibold text-sage-600">
                         {index + 1}
                       </span>
                     </div>
@@ -229,16 +229,16 @@ export function LivingInPlace() {
       </section>
 
       {/* Assessment CTA */}
-      <section className="py-20 bg-teal-600 text-white">
+      <section className="py-20 bg-sage-600 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl lg:text-4xl mb-6">
             Are You Ready to Live in Place?
           </h2>
-          <p className="text-xl text-teal-50 leading-relaxed mb-8">
+          <p className="text-xl text-sage-50 leading-relaxed mb-8">
             Take our Living in Place Readiness Assessment to evaluate your current situation and identify areas that may need attention or planning.
           </p>
           <Link to="/assessments">
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-teal-600">
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-sage-600">
               Take the Readiness Assessment
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
@@ -257,7 +257,7 @@ export function LivingInPlace() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/library">
-              <Button size="lg" className="bg-teal-600 hover:bg-teal-700">
+              <Button size="lg" className="bg-sage-600 hover:bg-sage-700">
                 Browse Resources
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -266,7 +266,7 @@ export function LivingInPlace() {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-teal-600 text-teal-600 hover:bg-teal-50"
+                className="border-sage-600 text-sage-600 hover:bg-sage-50"
               >
                 View Programs
               </Button>

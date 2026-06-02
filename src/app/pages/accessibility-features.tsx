@@ -66,12 +66,12 @@ export function AccessibilityFeatures() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-teal-50 to-blue-50 py-20">
+      <section className="bg-gradient-to-br from-sage-50 to-sage-50 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-14 h-14 bg-teal-600 rounded-lg flex items-center justify-center">
+                <div className="w-14 h-14 bg-sage-600 rounded-lg flex items-center justify-center">
                   <Settings className="h-7 w-7 text-white" />
                 </div>
                 <h1 className="text-4xl lg:text-5xl text-gray-900">
@@ -114,8 +114,8 @@ export function AccessibilityFeatures() {
               return (
                 <Card key={index} className="border-gray-200 hover:shadow-lg transition-shadow">
                   <CardHeader>
-                    <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mb-4">
-                      <Icon className="h-6 w-6 text-teal-600" />
+                    <div className="w-12 h-12 bg-sage-100 rounded-lg flex items-center justify-center mb-4">
+                      <Icon className="h-6 w-6 text-sage-600" />
                     </div>
                     <CardTitle className="text-xl text-gray-900">
                       {feature.title}
@@ -136,19 +136,19 @@ export function AccessibilityFeatures() {
       </section>
 
       {/* Widget Demo Section */}
-      <section className="py-20 bg-teal-600 text-white">
+      <section className="py-20 bg-sage-600 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-6">
-            <Settings className="h-8 w-8 text-teal-600" />
+            <Settings className="h-8 w-8 text-sage-600" />
           </div>
           <h2 className="text-3xl lg:text-4xl mb-6">
             Try the Accessibility Widget Now
           </h2>
-          <p className="text-xl text-teal-50 leading-relaxed mb-8">
+          <p className="text-xl text-sage-50 leading-relaxed mb-8">
             Look for the floating button in the bottom-right corner of this page. Click it to open the accessibility panel and start customizing your experience right away.
           </p>
           <div className="bg-white/10 rounded-lg p-6 max-w-2xl mx-auto">
-            <p className="text-lg text-teal-50">
+            <p className="text-lg text-sage-50">
               The accessibility widget appears on every page of our website, so your preferences follow you wherever you navigate.
             </p>
           </div>
@@ -172,7 +172,7 @@ export function AccessibilityFeatures() {
               <div className="space-y-4">
                 {benefits.map((benefit, index) => (
                   <div key={index} className="flex items-start gap-3">
-                    <Check className="h-6 w-6 text-teal-600 flex-shrink-0 mt-1" />
+                    <Check className="h-6 w-6 text-sage-600 flex-shrink-0 mt-1" />
                     <p className="text-lg text-gray-700">{benefit}</p>
                   </div>
                 ))}
@@ -198,8 +198,8 @@ export function AccessibilityFeatures() {
             {otherAccessibility.map((item, index) => (
               <Card key={index} className="border-gray-200">
                 <CardHeader>
-                  <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center mb-3">
-                    <Eye className="h-5 w-5 text-teal-600" />
+                  <div className="w-10 h-10 bg-sage-100 rounded-lg flex items-center justify-center mb-3">
+                    <Eye className="h-5 w-5 text-sage-600" />
                   </div>
                   <CardTitle className="text-lg text-gray-900">
                     {item.title}
@@ -224,7 +224,7 @@ export function AccessibilityFeatures() {
             If you encounter any accessibility barriers or have suggestions for improvement, please let us know. We're committed to making our website as accessible as possible for everyone.
           </p>
           <Link to="/contact">
-            <Button size="lg" className="bg-teal-600 hover:bg-teal-700">
+            <Button size="lg" className="bg-sage-600 hover:bg-sage-700">
               Share Your Feedback
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
@@ -243,7 +243,7 @@ export function AccessibilityFeatures() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/library">
-              <Button size="lg" className="bg-teal-600 hover:bg-teal-700">
+              <Button size="lg" className="bg-sage-600 hover:bg-sage-700">
                 Browse Resources
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -252,7 +252,7 @@ export function AccessibilityFeatures() {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-teal-600 text-teal-600 hover:bg-teal-50"
+                className="border-sage-600 text-sage-600 hover:bg-sage-50"
               >
                 View Programs
               </Button>

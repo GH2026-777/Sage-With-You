@@ -1,9 +1,11 @@
-import { Outlet, Link, useLocation, useNavigate } from "react-router";
-import { Heart, Menu, X, User, LogOut } from "lucide-react";
+import { Outlet, Link, ScrollRestoration, useLocation, useNavigate } from "react-router";
+import { Menu, X, User, LogOut } from "lucide-react";
+import { FOOTER_HEADING_CLASS, SiteLogo } from "./SiteLogo";
 import { useState, useEffect } from "react";
 import { AccessibilityWidget } from "./accessibility-widget";
 import { CookieConsentBanner } from "./CookieConsentBanner";
 import { supabase } from "../../utils/supabase";
+import { initSupabaseAuth, isInvalidRefreshTokenError, clearStaleSupabaseSession } from "../../utils/authSession";
 import { Toaster } from "sonner";
 import { SiteMeta } from "./SiteMeta";
 
@@ -35,7 +37,12 @@ export function Layout() {
   }, []);
 
   const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
+    await initSupabaseAuth();
+    const { data: { session }, error } = await supabase.auth.getSession();
+    if (error && isInvalidRefreshTokenError(error)) {
+      await clearStaleSupabaseSession();
+      return;
+    }
     if (session) {
       setIsAuthenticated(true);
       setUserEmail(session.user?.email || null);
@@ -56,9 +63,23 @@ export function Layout() {
     { name: "Resources", href: "/resources" },
     { name: "Assessments", href: "/assessments" },
     { name: "Library", href: "/library" },
-    { name: "Contact", href: "/contact" },
     { name: "Account", href: "/account" },
   ];
+
+  const footerExploreLinks = [
+    { name: "About us", href: "/about" },
+    { name: "Programs", href: "/programs" },
+    { name: "Contact", href: "/contact" },
+  ];
+
+  const footerResourceLinks = [
+    { name: "Resources", href: "/resources" },
+    { name: "Assessments", href: "/assessments" },
+    { name: "Library", href: "/library" },
+  ];
+
+  const footerLinkClass =
+    "text-sm text-white transition-colors hover:text-white/80";
 
   const legalLinks = [
     { name: "Privacy policy", href: "/privacy" },
@@ -72,25 +93,24 @@ export function Layout() {
     return location.pathname.startsWith(href);
   };
 
+  useEffect(() => {
+    const current = `${location.pathname}${location.search}`;
+    const stored = sessionStorage.getItem("swy_path");
+    if (stored !== current) {
+      sessionStorage.setItem("swy_prev_path", stored ?? "");
+      sessionStorage.setItem("swy_path", current);
+    }
+  }, [location.pathname, location.search]);
+
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col overflow-x-hidden bg-white">
+      <ScrollRestoration />
       <SiteMeta />
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
         <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-2">
-              <Heart className="h-8 w-8 text-teal-600 fill-teal-600" />
-              <div className="flex flex-col">
-                <span className="font-semibold text-xl text-gray-900">
-                  Sage With You
-                </span>
-                <span className="text-xs text-gray-600 -mt-1">
-                  Living in Place
-                </span>
-              </div>
-            </Link>
+          <div className="flex justify-between items-center gap-2 min-h-[3.75rem] py-2 sm:min-h-[4.75rem] sm:py-2.5 md:min-h-[5.25rem] md:py-3">
+            <SiteLogo variant="header" />
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-6">
@@ -100,8 +120,8 @@ export function Layout() {
                   to={item.href}
                   className={`text-base transition-colors ${
                     isActive(item.href)
-                      ? "text-teal-600 font-medium"
-                      : "text-gray-700 hover:text-teal-600"
+                      ? "text-sage-600 font-medium"
+                      : "text-gray-700 hover:text-sage-600"
                   }`}
                 >
                   {item.name}
@@ -111,14 +131,14 @@ export function Layout() {
                 <div className="flex items-center gap-3 ml-2">
                   <Link
                     to="/account"
-                    className="flex items-center gap-2 px-3 py-1.5 bg-teal-50 rounded-lg hover:bg-teal-100 transition-colors"
+                    className="flex items-center gap-2 px-3 py-1.5 bg-sage-50 rounded-lg hover:bg-sage-100 transition-colors"
                   >
-                    <User className="h-4 w-4 text-teal-600" />
-                    <span className="text-sm text-teal-700">{userEmail?.split("@")[0]}</span>
+                    <User className="h-4 w-4 text-sage-600" />
+                    <span className="text-sm text-sage-700">{userEmail?.split("@")[0]}</span>
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors"
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-sage-600 hover:bg-sage-50 rounded-lg transition-colors"
                   >
                     <LogOut className="h-4 w-4" />
                     Logout
@@ -127,7 +147,7 @@ export function Layout() {
               ) : (
                 <Link
                   to="/login"
-                  className="flex items-center gap-1.5 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors ml-2"
+                  className="flex items-center gap-1.5 px-4 py-2 bg-sage-600 text-white rounded-lg hover:bg-sage-700 transition-colors ml-2"
                 >
                   <User className="h-4 w-4" />
                   Sign In
@@ -158,7 +178,7 @@ export function Layout() {
                   onClick={() => setMobileMenuOpen(false)}
                   className={`block px-4 py-3 text-base transition-colors ${
                     isActive(item.href)
-                      ? "text-teal-600 bg-teal-50 font-medium"
+                      ? "text-sage-600 bg-sage-50 font-medium"
                       : "text-gray-700 hover:bg-gray-50"
                   }`}
                 >
@@ -174,9 +194,9 @@ export function Layout() {
                   >
                     Account settings
                   </Link>
-                  <div className="px-4 py-2 flex items-center gap-2 bg-teal-50 mx-4 rounded-lg mb-2">
-                    <User className="h-4 w-4 text-teal-600" />
-                    <span className="text-sm text-teal-700">{userEmail}</span>
+                  <div className="px-4 py-2 flex items-center gap-2 bg-sage-50 mx-4 rounded-lg mb-2">
+                    <User className="h-4 w-4 text-sage-600" />
+                    <span className="text-sm text-sage-700">{userEmail}</span>
                   </div>
                   <button
                     onClick={() => {
@@ -194,7 +214,7 @@ export function Layout() {
                   <Link
                     to="/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-center gap-2 w-full py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
+                    className="flex items-center justify-center gap-2 w-full py-3 bg-sage-600 text-white rounded-lg hover:bg-sage-700 transition-colors"
                   >
                     <User className="h-4 w-4" />
                     Sign In
@@ -219,34 +239,33 @@ export function Layout() {
       <AccessibilityWidget />
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white mt-auto">
+      <footer className="bg-sage-950 text-white mt-auto">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* About */}
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Heart className="h-6 w-6 text-teal-400 fill-teal-400" />
-                <div>
-                  <div className="font-semibold text-lg">Sage With You</div>
-                  <div className="text-sm text-gray-400">Living in Place</div>
-                </div>
+          <div className="grid grid-cols-1 gap-y-10 gap-x-10 sm:grid-cols-2 sm:gap-x-12 lg:grid-cols-12 lg:gap-x-10 xl:gap-x-14 items-start">
+            {/* Brand */}
+            <div className="w-max max-w-full sm:col-span-2 lg:col-span-4 lg:pr-6 xl:pr-10">
+              <div className="mb-4 min-h-10 sm:min-h-11 flex items-center">
+                <SiteLogo variant="footer" linkToHome={false} />
               </div>
-              <p className="text-gray-400 text-sm">
-                Supporting individuals and caregivers with evidence-informed
-                guidance for aging with dignity and confidence at home.
+              <p className="text-sm text-white leading-relaxed">
+                <span className="block whitespace-nowrap">
+                  Supporting individuals and caregivers
+                </span>
+                <span className="block whitespace-nowrap">
+                  with evidence-informed guidance for
+                </span>
+                <span className="block whitespace-nowrap">
+                  aging with dignity and confidence at home.
+                </span>
               </p>
             </div>
 
-            {/* Quick Links */}
-            <div>
-              <h3 className="font-semibold mb-4">Quick Links</h3>
-              <ul className="space-y-2">
-                {navigation.map((item) => (
-                  <li key={item.name}>
-                    <Link
-                      to={item.href}
-                      className="text-gray-400 hover:text-teal-400 text-sm transition-colors"
-                    >
+            <div className="min-w-0 lg:col-span-2">
+              <h3 className={`${FOOTER_HEADING_CLASS} mb-4`}>Explore</h3>
+              <ul className="space-y-3">
+                {footerExploreLinks.map((item) => (
+                  <li key={item.href}>
+                    <Link to={item.href} className={footerLinkClass}>
                       {item.name}
                     </Link>
                   </li>
@@ -254,15 +273,25 @@ export function Layout() {
               </ul>
             </div>
 
-            <div>
-              <h3 className="font-semibold mb-4">Legal</h3>
-              <ul className="space-y-2">
+            <div className="min-w-0 lg:col-span-2">
+              <h3 className={`${FOOTER_HEADING_CLASS} mb-4`}>Resources</h3>
+              <ul className="space-y-3">
+                {footerResourceLinks.map((item) => (
+                  <li key={item.href}>
+                    <Link to={item.href} className={footerLinkClass}>
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="min-w-0 lg:col-span-2">
+              <h3 className={`${FOOTER_HEADING_CLASS} mb-4`}>Legal</h3>
+              <ul className="space-y-3">
                 {legalLinks.map((item) => (
                   <li key={item.href}>
-                    <Link
-                      to={item.href}
-                      className="text-gray-400 hover:text-teal-400 text-sm transition-colors"
-                    >
+                    <Link to={item.href} className={footerLinkClass}>
                       {item.name}
                     </Link>
                   </li>
@@ -271,19 +300,28 @@ export function Layout() {
             </div>
 
             {/* Contact Info */}
-            <div>
-              <h3 className="font-semibold mb-4">Get in Touch</h3>
-              <p className="text-gray-400 text-sm mb-2">
-                SageÉlan Foundation, Inc.
+            <div className="w-max max-w-full sm:col-span-2 lg:col-span-2">
+              <h3 className={`${FOOTER_HEADING_CLASS} mb-4`}>Get in Touch</h3>
+              <p className="text-sm text-white mb-2">
+                <a
+                  href="https://sageelan.org"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="whitespace-nowrap transition-colors hover:text-white/80 underline-offset-2 hover:underline"
+                >
+                  SageÉlan Foundation, Inc.
+                </a>
               </p>
-              <p className="text-gray-400 text-sm">
-                Committed to supporting wellbeing and confidence for those
-                choosing to age in place.
+              <p className="text-sm text-white leading-relaxed">
+                <span className="block whitespace-nowrap">Committed to supporting</span>
+                <span className="block whitespace-nowrap">wellbeing and confidence</span>
+                <span className="block whitespace-nowrap">for those choosing to live</span>
+                <span className="block whitespace-nowrap">in place.</span>
               </p>
             </div>
           </div>
 
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+          <div className="border-t border-sage-800 mt-8 pt-8 text-center text-sm text-white">
             <p>
               &copy; {new Date().getFullYear()} SageÉlan Foundation, Inc. All
               rights reserved.

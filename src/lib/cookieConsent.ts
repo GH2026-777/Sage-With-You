@@ -1,5 +1,5 @@
 /**
- * Cookie consent — shared `cookie_consent` storage contract with other SageÉlan sites (e.g. SagePanthers):
+ * Cookie consent - shared `cookie_consent` storage contract with other SageÉlan sites (e.g. SagePanthers):
  * localStorage `cookie_consent` = `accepted` | `declined`.
  */
 

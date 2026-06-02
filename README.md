@@ -21,8 +21,9 @@ Copy `.env.example` to `.env` and set at least:
 - `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` — Project **API** settings in Supabase.
 - Optional: `VITE_SITE_URL` — Public origin without trailing slash (Open Graph URLs; default `https://sage-with-you.org`).
 - Optional: `VITE_LIBRARY_USE_STORAGE`, `VITE_LIBRARY_BUCKET` — See `.env.example` and `src/utils/libraryAssets.ts` (`LIBRARY_EXPECTED_STORAGE_PATHS` lists upload paths).
+- Staging gate: `VITE_STAGING_GATE_PASSWORD` (ON by default). Public go-live: `VITE_ENABLE_PASSWORD_GATE=false` then rebuild. See `.env.production.example`.
 
-Staging may use a **password gate** (see workspace rules); remove only when you intentionally go live.
+Production builds: copy `.env.production.example` to `.env.production` on the deploy machine.
 
 ## CI
 
@@ -32,8 +33,9 @@ GitHub Actions workflow `.github/workflows/ci.yml` runs `npm ci`, then **lint**,
 
 1. Run SQL migrations in order in the SQL Editor (or `supabase db push`):  
    `001_contact_submissions.sql` → `002_contact_submissions_edge_only.sql` → `003_library_storage_bucket.sql` → `004_contact_submit_rate_limit.sql`.
-2. Deploy Edge Functions (e.g. `deploy-supabase-functions.bat` / `.sh`): **`submit-contact`**, **`delete-account`**.
+2. Deploy Edge Functions (e.g. `deploy-supabase-functions.bat` / `.sh`): **`submit-contact`**, **`delete-account`**, **`auth-send-email`** (hook backup).
 3. Set Edge **secrets** for `submit-contact` (SMTP, optional BCC, `CONTACT_RATE_SALT`, optional `CONTACT_RATE_LIMIT_PER_HOUR`) — see comments in `supabase/functions/submit-contact/index.ts` and `.env.example`.
+4. Full Dashboard checklist: **`docs/SUPABASE_OPS_CHECKLIST.md`**. Auth email: **`docs/AUTH_EMAIL_SETUP.md`**.
 
 ## Static / SEO
 

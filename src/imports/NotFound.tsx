@@ -35,7 +35,7 @@ interface NotFoundProps {
 
 export function NotFound({ onHomeClick }: NotFoundProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-sage-50 to-purple-50 flex items-center justify-center px-4">
       <div className="max-w-md w-full text-center">
         {/* Replace this with your logo component */}
         <div className="mb-8">

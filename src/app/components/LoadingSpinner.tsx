@@ -14,9 +14,9 @@ interface LoadingSpinnerProps {
 export function LoadingSpinner({ message = 'Loading...', fullScreen = true }: LoadingSpinnerProps) {
   if (fullScreen) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-teal-50 via-blue-50 to-teal-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-sage-50 via-sage-50 to-sage-50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-16 h-16 mx-auto mb-4 animate-spin text-teal-600" />
+          <Loader2 className="w-16 h-16 mx-auto mb-4 animate-spin text-sage-600" />
           <p className="text-gray-700">{message}</p>
         </div>
       </div>
@@ -26,7 +26,7 @@ export function LoadingSpinner({ message = 'Loading...', fullScreen = true }: Lo
   return (
     <div className="flex items-center justify-center p-8">
       <div className="text-center">
-        <Loader2 className="w-12 h-12 mx-auto mb-3 animate-spin text-teal-600" />
+        <Loader2 className="w-12 h-12 mx-auto mb-3 animate-spin text-sage-600" />
         <p className="text-gray-600 text-sm">{message}</p>
       </div>
     </div>
@@ -44,6 +44,6 @@ export function InlineSpinner({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   };
 
   return (
-    <Loader2 className={`inline-block animate-spin text-teal-600 ${sizeClasses[size]}`} />
+    <Loader2 className={`inline-block animate-spin text-sage-600 ${sizeClasses[size]}`} />
   );
 }

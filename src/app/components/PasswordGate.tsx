@@ -1,9 +1,9 @@
 /**
  * Password Gate Component
- * Protects the site with a password for staging/testing environments
- * 
- * To disable: Set ENABLE_PASSWORD_GATE to false
- * To change password: Update SITE_PASSWORD below
+ * Protects the site with a password for staging/testing environments.
+ *
+ * Deploy-time toggle: `VITE_ENABLE_PASSWORD_GATE=false` disables the gate (public go-live).
+ * Password: set `VITE_STAGING_GATE_PASSWORD` in .env / production build env.
  */
 
 import { useState, useEffect } from 'react';
@@ -11,10 +11,12 @@ import { Lock, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { AuthBrandHeader } from './AuthBrandHeader';
+import {
+  isStagingPasswordGateEnabled,
+  stagingGatePassword,
+} from '../../lib/staging-gate';
 
-// Configuration
-const ENABLE_PASSWORD_GATE = true; // Set to false to disable password protection
-const SITE_PASSWORD = 'SageElan2026'; // Change this to your desired password
 const STORAGE_KEY = 'site_access_granted';
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
@@ -29,27 +31,26 @@ export function PasswordGate({ children }: PasswordGateProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
 
+  const gateEnabled = isStagingPasswordGateEnabled();
+  const sitePassword = stagingGatePassword();
+
   useEffect(() => {
-    // Skip password gate if disabled
-    if (!ENABLE_PASSWORD_GATE) {
+    if (!gateEnabled) {
       setIsUnlocked(true);
       setIsChecking(false);
       return;
     }
 
-    // Check if user has already unlocked the site
     const checkAccess = () => {
       try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
           const { timestamp, granted } = JSON.parse(stored);
           const now = Date.now();
-          
-          // Check if session is still valid
+
           if (granted && (now - timestamp) < SESSION_DURATION) {
             setIsUnlocked(true);
           } else {
-            // Session expired, clear storage
             localStorage.removeItem(STORAGE_KEY);
           }
         }
@@ -61,14 +62,18 @@ export function PasswordGate({ children }: PasswordGateProps) {
     };
 
     checkAccess();
-  }, []);
+  }, [gateEnabled]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
-    if (password === SITE_PASSWORD) {
-      // Grant access and store in localStorage
+    if (!sitePassword) {
+      setError('Staging access password is not configured (set VITE_STAGING_GATE_PASSWORD).');
+      return;
+    }
+
+    if (password === sitePassword) {
       const accessData = {
         granted: true,
         timestamp: Date.now(),
@@ -81,39 +86,26 @@ export function PasswordGate({ children }: PasswordGateProps) {
     }
   };
 
-  // Show nothing while checking
   if (isChecking) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-teal-50 via-blue-50 to-teal-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-sage-50 via-sage-50 to-sage-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sage-600 mx-auto"></div>
           <p className="text-gray-600 mt-4">Loading...</p>
         </div>
       </div>
     );
   }
 
-  // If unlocked or disabled, show the actual app
   if (isUnlocked) {
     return <>{children}</>;
   }
 
-  // Show password gate
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-blue-50 to-teal-50 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-sage-50 via-sage-50 to-sage-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
-        {/* Branding */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-teal-600 rounded-full mb-4">
-            <Lock className="h-8 w-8 text-white" />
-          </div>
-          <h1 className="text-3xl font-semibold text-gray-900 mb-2">
-            SageÉlan Foundation
-          </h1>
-          <p className="text-gray-600">Sage With You - Living in Place</p>
-        </div>
-
-        <Card className="border-gray-200 shadow-xl">
+        <Card className="border-gray-200 shadow-xl overflow-hidden">
+          <AuthBrandHeader />
           <CardHeader>
             <CardTitle className="text-2xl text-center text-gray-900">
               Password Protected
@@ -164,7 +156,7 @@ export function PasswordGate({ children }: PasswordGateProps) {
 
               <Button
                 type="submit"
-                className="w-full bg-teal-600 hover:bg-teal-700 text-white"
+                className="w-full bg-sage-600 hover:bg-sage-700 text-white"
               >
                 Enter Site
               </Button>

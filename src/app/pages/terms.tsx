@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { FileText, ChevronDown } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Button } from "../components/ui/button";
+import { BackToHomeButton } from "../components/BackToHome";
 
 /**
  * Terms of Service for Sage With You, a program of SageÉlan Foundation, Inc.
@@ -21,9 +22,9 @@ export function Terms() {
 
   return (
     <div>
-      <section className="bg-gradient-to-br from-teal-50 to-blue-50 py-16">
+      <section className="bg-gradient-to-br from-sage-50 to-sage-50 py-16">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3 text-teal-700 mb-4">
+          <div className="flex items-center gap-3 text-sage-700 mb-4">
             <FileText className="h-10 w-10 shrink-0" aria-hidden />
             <h1 className="text-4xl font-semibold text-gray-900">Terms of Service &amp; Conditions</h1>
           </div>
@@ -53,7 +54,7 @@ export function Terms() {
               <p>
                 If you are visually impaired, have a disability, or would like these Terms in another language or
                 accessible format, contact us at{" "}
-                <a href="mailto:info@sageelan.org" className="text-teal-700 font-medium hover:underline">
+                <a href="mailto:info@sageelan.org" className="text-sage-700 font-medium hover:underline">
                   info@sageelan.org
                 </a>
                 .
@@ -91,7 +92,7 @@ export function Terms() {
                 Services. If you are under 18, you must have a parent or guardian&apos;s permission where applicable.
                 By creating an account, you represent and warrant that you meet this age requirement.
               </p>
-              <div className="rounded-lg border-l-4 border-teal-600 bg-teal-50 p-4">
+              <div className="rounded-lg border-l-4 border-sage-600 bg-sage-50 p-4">
                 <p className="font-semibold text-gray-900 mb-1">Age verification</p>
                 <p>
                   Where registration is offered, you must confirm that you are 18 years of age or older. We may store
@@ -126,7 +127,7 @@ export function Terms() {
                 Our privacy practices explain what we collect, why we collect it, and how we use and protect it. We may
                 use aggregated or de-identified data to improve Services or support research, without identifying you.
                 See our{" "}
-                <Link to="/privacy" className="text-teal-700 font-medium hover:underline">
+                <Link to="/privacy" className="text-sage-700 font-medium hover:underline">
                   Privacy Policy
                 </Link>
                 . If you need a Data Processing Agreement or similar documentation for your organization, contact us.
@@ -164,11 +165,11 @@ export function Terms() {
                 <strong>not</strong> a medical device, medical service, or clinical intervention. They do not diagnose,
                 treat, cure, or prevent illness or mental-health conditions.
               </p>
-              <div className="rounded-lg border-l-4 border-teal-600 bg-teal-50 p-4">
+              <div className="rounded-lg border-l-4 border-sage-600 bg-sage-50 p-4">
                 <p className="font-semibold text-gray-900 mb-2">No medical or mental-health advice</p>
                 <p className="mb-2">
                   Only licensed healthcare professionals can provide medical advice or treatment. Information you
-                  receive through the Services is educational and designed to support — not replace — your relationship
+                  receive through the Services is educational and designed to support, not replace, your relationship
                   with your healthcare providers.
                 </p>
                 <ul className="list-disc pl-6 space-y-1">
@@ -186,9 +187,9 @@ export function Terms() {
                   onClick={() => setAssumptionOfRiskOpen(!assumptionOfRiskOpen)}
                   className="flex w-full items-center justify-between p-4 text-left hover:bg-gray-50 rounded-lg"
                 >
-                  <span className="font-semibold text-teal-800">Assumption of risk</span>
+                  <span className="font-semibold text-sage-800">Assumption of risk</span>
                   <ChevronDown
-                    className={`h-5 w-5 text-teal-700 transition-transform ${assumptionOfRiskOpen ? "rotate-180" : ""}`}
+                    className={`h-5 w-5 text-sage-700 transition-transform ${assumptionOfRiskOpen ? "rotate-180" : ""}`}
                   />
                 </button>
                 {assumptionOfRiskOpen && (
@@ -214,9 +215,9 @@ export function Terms() {
                   onClick={() => setHealthSafetyOpen(!healthSafetyOpen)}
                   className="flex w-full items-center justify-between p-4 text-left hover:bg-gray-50 rounded-lg"
                 >
-                  <span className="font-semibold text-teal-800">Important health &amp; safety notices</span>
+                  <span className="font-semibold text-sage-800">Important health &amp; safety notices</span>
                   <ChevronDown
-                    className={`h-5 w-5 text-teal-700 transition-transform ${healthSafetyOpen ? "rotate-180" : ""}`}
+                    className={`h-5 w-5 text-sage-700 transition-transform ${healthSafetyOpen ? "rotate-180" : ""}`}
                   />
                 </button>
                 {healthSafetyOpen && (
@@ -310,8 +311,8 @@ export function Terms() {
                   onClick={() => setDmcaOpen(!dmcaOpen)}
                   className="flex w-full items-center justify-between p-4 text-left hover:bg-gray-50 rounded-lg"
                 >
-                  <span className="font-semibold text-teal-800">DMCA notice requirements (summary)</span>
-                  <ChevronDown className={`h-5 w-5 text-teal-700 transition-transform ${dmcaOpen ? "rotate-180" : ""}`} />
+                  <span className="font-semibold text-sage-800">DMCA notice requirements (summary)</span>
+                  <ChevronDown className={`h-5 w-5 text-sage-700 transition-transform ${dmcaOpen ? "rotate-180" : ""}`} />
                 </button>
                 {dmcaOpen && (
                   <div className="border-t border-gray-100 px-4 pb-4 pt-2 space-y-2 text-sm">
@@ -332,7 +333,7 @@ export function Terms() {
                     </ul>
                     <p className="pt-2">
                       <strong>Designated agent:</strong>{" "}
-                      <a href="mailto:info@sageelan.org" className="text-teal-700 font-medium hover:underline">
+                      <a href="mailto:info@sageelan.org" className="text-sage-700 font-medium hover:underline">
                         info@sageelan.org
                       </a>{" "}
                       (subject line: &quot;DMCA Notice&quot;). A physical mailing address for notices is available upon
@@ -348,9 +349,9 @@ export function Terms() {
                   onClick={() => setCounterNoticeOpen(!counterNoticeOpen)}
                   className="flex w-full items-center justify-between p-4 text-left hover:bg-gray-50 rounded-lg"
                 >
-                  <span className="font-semibold text-teal-800">Counter-notice (summary)</span>
+                  <span className="font-semibold text-sage-800">Counter-notice (summary)</span>
                   <ChevronDown
-                    className={`h-5 w-5 text-teal-700 transition-transform ${counterNoticeOpen ? "rotate-180" : ""}`}
+                    className={`h-5 w-5 text-sage-700 transition-transform ${counterNoticeOpen ? "rotate-180" : ""}`}
                   />
                 </button>
                 {counterNoticeOpen && (
@@ -508,7 +509,7 @@ export function Terms() {
                 We may send service-related emails and electronic notices. Your use of the Services constitutes consent
                 to receive certain electronic communications required to operate the Services. You may request a paper
                 copy of communications by contacting{" "}
-                <a href="mailto:info@sageelan.org" className="text-teal-700 font-medium hover:underline">
+                <a href="mailto:info@sageelan.org" className="text-sage-700 font-medium hover:underline">
                   info@sageelan.org
                 </a>
                 .
@@ -554,7 +555,7 @@ export function Terms() {
             <CardContent className={p}>
               <p>
                 For questions about these Terms:{" "}
-                <a href="mailto:info@sageelan.org" className="text-teal-700 font-medium hover:underline">
+                <a href="mailto:info@sageelan.org" className="text-sage-700 font-medium hover:underline">
                   info@sageelan.org
                 </a>
                 .
@@ -562,7 +563,7 @@ export function Terms() {
             </CardContent>
           </Card>
 
-          <Card className="border-gray-200 border-teal-200 bg-teal-50/50">
+          <Card className="border-gray-200 border-sage-200 bg-sage-50/50">
             <CardHeader>
               <CardTitle className={h2}>Plain-language reminders</CardTitle>
             </CardHeader>
@@ -570,15 +571,13 @@ export function Terms() {
               <ul className="list-disc pl-6 space-y-1 text-sm text-gray-700">
                 <li>Sage With You is educational and supportive, not a substitute for professional care.</li>
                 <li>Use what resonates; check with a clinician when in doubt.</li>
-                <li>Be kind to yourself — progress is a practice.</li>
+                <li>Be kind to yourself: progress is a practice.</li>
               </ul>
             </CardContent>
           </Card>
 
           <div className="flex flex-wrap gap-3">
-            <Button asChild variant="outline">
-              <Link to="/">Back to home</Link>
-            </Button>
+            <BackToHomeButton preferHistoryBack={false} />
             <Button asChild variant="outline">
               <Link to="/privacy">Privacy Policy</Link>
             </Button>

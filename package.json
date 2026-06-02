@@ -1,5 +1,5 @@
 {
-  "name": "@figma/my-make-file",
+  "name": "sage-with-you",
   "private": true,
   "version": "0.0.1",
   "type": "module",
@@ -8,7 +8,8 @@
     "dev": "vite",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "generate:og": "node scripts/generate-og.mjs",
+    "generate:og": "npm run process:brand && node scripts/generate-og.mjs",
+    "process:brand": "node scripts/process-brand-logos.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },
@@ -55,6 +56,8 @@
     "lucide-react": "0.487.0",
     "motion": "12.23.24",
     "next-themes": "0.4.6",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "react-day-picker": "8.10.1",
     "react-dnd": "16.0.1",
     "react-dnd-html5-backend": "16.0.1",
@@ -73,6 +76,7 @@
   "devDependencies": {
     "@eslint/js": "9.39.4",
     "@tailwindcss/vite": "4.1.12",
+    "@types/node": "22.13.5",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "@vitejs/plugin-react": "4.7.0",
@@ -86,19 +90,8 @@
     "typescript": "5.7.3",
     "typescript-eslint": "8.24.1",
     "vite": "^6.4.1",
-    "vitest": "3.0.9"
-  },
-  "peerDependencies": {
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
-  },
-  "peerDependenciesMeta": {
-    "react": {
-      "optional": true
-    },
-    "react-dom": {
-      "optional": true
-    }
+    "vitest": "3.0.9",
+    "vite-plugin-pwa": "^1.2.0"
   },
   "pnpm": {
     "overrides": {

@@ -36,12 +36,12 @@ export function PersonCenteredCare() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-teal-50 to-blue-50 py-20">
+      <section className="bg-gradient-to-br from-sage-50 to-sage-50 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-14 h-14 bg-teal-600 rounded-lg flex items-center justify-center">
+                <div className="w-14 h-14 bg-sage-600 rounded-lg flex items-center justify-center">
                   <Heart className="h-7 w-7 text-white" />
                 </div>
                 <h1 className="text-4xl lg:text-5xl text-gray-900">
@@ -49,7 +49,7 @@ export function PersonCenteredCare() {
                 </h1>
               </div>
               <p className="text-xl text-gray-700 leading-relaxed mb-6">
-                Your story, your choices, your home. We believe in supporting you as a whole person—honoring your dignity, respecting your preferences, and empowering you to maintain control over your life.
+                Your story, your choices, your home. We believe in supporting you as a whole person, honoring your dignity, respecting your preferences, and empowering you to maintain control over your life.
               </p>
               <p className="text-lg text-gray-600 leading-relaxed">
                 Person-centered care means putting you at the heart of every decision, recognizing that you are the expert on your own life.
@@ -83,8 +83,8 @@ export function PersonCenteredCare() {
               <Card key={index} className="border-gray-200 hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <CardTitle className="text-xl text-gray-900 flex items-center gap-3">
-                    <div className="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Heart className="h-5 w-5 text-teal-600" />
+                    <div className="w-10 h-10 bg-sage-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Heart className="h-5 w-5 text-sage-600" />
                     </div>
                     {principle.title}
                   </CardTitle>
@@ -115,7 +115,7 @@ export function PersonCenteredCare() {
               <div className="space-y-4">
                 {aspects.map((aspect, index) => (
                   <div key={index} className="flex items-start gap-3">
-                    <Check className="h-6 w-6 text-teal-600 flex-shrink-0 mt-1" />
+                    <Check className="h-6 w-6 text-sage-600 flex-shrink-0 mt-1" />
                     <p className="text-lg text-gray-700">{aspect}</p>
                   </div>
                 ))}
@@ -126,16 +126,16 @@ export function PersonCenteredCare() {
       </section>
 
       {/* Why It Matters */}
-      <section className="py-20 bg-teal-600 text-white">
+      <section className="py-20 bg-sage-600 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl lg:text-4xl mb-6">
             Why Person-Centered Care Matters
           </h2>
-          <p className="text-xl text-teal-50 leading-relaxed mb-6">
+          <p className="text-xl text-sage-50 leading-relaxed mb-6">
             Research consistently shows that person-centered care leads to better health outcomes, increased satisfaction, and improved quality of life. When you feel heard, respected, and empowered, you're more likely to engage actively in your own wellbeing.
           </p>
-          <p className="text-xl text-teal-50 leading-relaxed">
-            Most importantly, person-centered care recognizes that aging in place is not just about physical safety—it's about maintaining your independence, your identity, and your connections to the people and places that matter most to you.
+          <p className="text-xl text-sage-50 leading-relaxed">
+            Most importantly, person-centered care recognizes that aging in place is not just about physical safety. It's about maintaining your independence, your identity, and your connections to the people and places that matter most to you.
           </p>
         </div>
       </section>
@@ -151,7 +151,7 @@ export function PersonCenteredCare() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/programs">
-              <Button size="lg" className="bg-teal-600 hover:bg-teal-700">
+              <Button size="lg" className="bg-sage-600 hover:bg-sage-700">
                 View Our Programs
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -160,7 +160,7 @@ export function PersonCenteredCare() {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-teal-600 text-teal-600 hover:bg-teal-50"
+                className="border-sage-600 text-sage-600 hover:bg-sage-50"
               >
                 Contact Us
               </Button>

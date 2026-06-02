@@ -20,7 +20,7 @@ export default tseslint.config(
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      // shadcn/ui exports variants alongside components — fine for Vite HMR
+      // shadcn/ui exports variants alongside components - fine for Vite HMR
       "react-refresh/only-export-components": "off",
       "@typescript-eslint/no-unused-vars": [
         "warn",

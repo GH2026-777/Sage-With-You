@@ -38,7 +38,7 @@ goto sb_check_login
 :sb_check_login
 if defined SAGE_WITH_YOU_PROJECT_REF (set "PROJECT_REF=%SAGE_WITH_YOU_PROJECT_REF%") else (set "PROJECT_REF=htckswutkpktxclyijwk")
 echo.
-echo [1/3] Checking Supabase login ^(project ref: %PROJECT_REF%^)...
+echo [1/4] Checking Supabase login ^(project ref: %PROJECT_REF%^)...
 
 if "%SB_MODE%"=="global" (
   supabase projects list >nul 2>&1
@@ -65,7 +65,7 @@ if errorlevel 1 (
   )
 )
 
-echo [2/3] Deploying submit-contact...
+echo [2/4] Deploying submit-contact...
 if "%SB_MODE%"=="global" (
   supabase functions deploy submit-contact --project-ref %PROJECT_REF%
 ) else if "%SB_MODE%"=="local" (
@@ -75,7 +75,7 @@ if "%SB_MODE%"=="global" (
 )
 if errorlevel 1 goto fail
 
-echo [3/3] Deploying delete-account...
+echo [3/4] Deploying delete-account...
 if "%SB_MODE%"=="global" (
   supabase functions deploy delete-account --project-ref %PROJECT_REF%
 ) else if "%SB_MODE%"=="local" (
@@ -85,8 +85,19 @@ if "%SB_MODE%"=="global" (
 )
 if errorlevel 1 goto fail
 
+echo [4/4] Deploying auth-send-email ^(sign-up confirmation; requires Auth Hook in Dashboard^)...
+if "%SB_MODE%"=="global" (
+  supabase functions deploy auth-send-email --no-verify-jwt --project-ref %PROJECT_REF%
+) else if "%SB_MODE%"=="local" (
+  call npx supabase functions deploy auth-send-email --no-verify-jwt --project-ref %PROJECT_REF%
+) else (
+  call npx -y supabase functions deploy auth-send-email --no-verify-jwt --project-ref %PROJECT_REF%
+)
+if errorlevel 1 goto fail
+
 echo.
-echo Done. ^(submit-contact, delete-account^)
+echo Done. ^(submit-contact, delete-account, auth-send-email^)
+echo Next: Dashboard - Authentication - Auth Hooks - Send Email - enable HTTPS hook.
 pause
 exit /b 0
 

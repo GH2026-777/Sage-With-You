@@ -120,7 +120,7 @@ export function Resources() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-teal-50 to-blue-50 py-20">
+      <section className="bg-gradient-to-br from-sage-50 to-sage-50 py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <h1 className="text-4xl lg:text-5xl mb-6 text-gray-900">
@@ -155,8 +155,8 @@ export function Resources() {
                   className="border-gray-200 hover:shadow-lg transition-shadow"
                 >
                   <CardHeader>
-                    <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mb-4">
-                      <Icon className="h-6 w-6 text-teal-600" />
+                    <div className="w-12 h-12 bg-sage-100 rounded-lg flex items-center justify-center mb-4">
+                      <Icon className="h-6 w-6 text-sage-600" />
                     </div>
                     <CardTitle className="text-xl text-gray-900">
                       {category.title}
@@ -170,7 +170,7 @@ export function Resources() {
                           key={idx}
                           className="text-sm text-gray-700 flex items-start"
                         >
-                          <span className="text-teal-600 mr-2">•</span>
+                          <span className="text-sage-600 mr-2">•</span>
                           <span>{item}</span>
                         </li>
                       ))}
@@ -206,7 +206,7 @@ export function Resources() {
                 >
                   <CardHeader>
                     <div className="flex items-center gap-3 mb-2">
-                      <Icon className="h-6 w-6 text-teal-600" />
+                      <Icon className="h-6 w-6 text-sage-600" />
                       <CardTitle className="text-xl text-gray-900">
                         {section.title}
                       </CardTitle>
@@ -220,7 +220,7 @@ export function Resources() {
                           key={idx}
                           className="text-sm text-gray-700 flex items-start"
                         >
-                          <span className="text-teal-600 mr-2">•</span>
+                          <span className="text-sage-600 mr-2">•</span>
                           <span>{link}</span>
                         </li>
                       ))}
@@ -261,12 +261,12 @@ export function Resources() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-teal-600 text-white">
+      <section className="py-20 bg-sage-600 text-white">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl lg:text-4xl mb-6">
             Need More Information?
           </h2>
-          <p className="text-xl text-teal-50 mb-8">
+          <p className="text-xl text-sage-50 mb-8">
             Contact us to learn more about accessing our resources or to ask
             questions about our programs.
           </p>

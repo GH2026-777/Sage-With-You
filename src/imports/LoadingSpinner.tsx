@@ -28,7 +28,7 @@ interface LoadingSpinnerProps {
 export function LoadingSpinner({ message = 'Loading...', fullScreen = true }: LoadingSpinnerProps) {
   if (fullScreen) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-sage-50 via-purple-50 to-pink-50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-16 h-16 mx-auto mb-4 animate-spin text-purple-600" />
           <p className="text-gray-700">{message}</p>
