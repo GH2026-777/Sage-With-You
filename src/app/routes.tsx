@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router";
 import { AppShell } from "./components/AppShell";
 import { Layout } from "./components/layout";
 import { RouteFallback } from "./components/RouteFallback";
+import { Assessments } from "./pages/assessments";
 
 export const router = createBrowserRouter([
   {
@@ -34,7 +35,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "assessments",
-        lazy: () => import("./pages/assessments").then((m) => ({ Component: m.Assessments })),
+        Component: Assessments,
       },
       {
         path: "library",
@@ -73,6 +74,60 @@ export const router = createBrowserRouter([
         lazy: () =>
           import("./pages/accessibility-features").then((m) => ({
             Component: m.AccessibilityFeatures,
+          })),
+      },
+      {
+        path: "sage-badge",
+        lazy: () => import("./pages/sage-badge/index").then((m) => ({ Component: m.SageBadgeHome })),
+      },
+      {
+        path: "sage-badge/companies",
+        lazy: () =>
+          import("./pages/sage-badge/companies").then((m) => ({ Component: m.SageBadgeCompanies })),
+      },
+      {
+        path: "sage-badge/companies/:slug",
+        lazy: () =>
+          import("./pages/sage-badge/company-profile").then((m) => ({
+            Component: m.SageBadgeCompanyProfile,
+          })),
+      },
+      {
+        path: "sage-badge/for-companies",
+        lazy: () =>
+          import("./pages/sage-badge/for-companies").then((m) => ({
+            Component: m.SageBadgeForCompanies,
+          })),
+      },
+      {
+        path: "sage-badge/experience",
+        lazy: () =>
+          import("./pages/sage-badge/experience").then((m) => ({ Component: m.SageBadgeExperience })),
+      },
+      {
+        path: "sage-badge/suggest-company",
+        lazy: () =>
+          import("./pages/sage-badge/suggest-company").then((m) => ({
+            Component: m.SageBadgeSuggestCompany,
+          })),
+      },
+      {
+        path: "sage-badge/admin",
+        lazy: () =>
+          import("./pages/sage-badge/admin").then((m) => ({ Component: m.SageBadgeAdmin })),
+      },
+      {
+        path: "sage-badge/scoring-standard",
+        lazy: () =>
+          import("./pages/sage-badge/scoring-standard").then((m) => ({
+            Component: m.SageBadgeScoringStandard,
+          })),
+      },
+      {
+        path: "sage-badge/wpe-policy",
+        lazy: () =>
+          import("./pages/sage-badge/wpe-policy").then((m) => ({
+            Component: m.SageBadgeWpePolicy,
           })),
       },
       {

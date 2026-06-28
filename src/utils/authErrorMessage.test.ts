@@ -3,6 +3,8 @@ import {
   authErrorMessage,
   isEmailNotConfirmed,
   isExistingUserSignup,
+  isTechnicalUserMessage,
+  userFacingMessage,
 } from "../utils/authErrorMessage";
 
 describe("authErrorMessage", () => {
@@ -27,5 +29,12 @@ describe("authErrorMessage", () => {
 
   it("falls back for unknown errors", () => {
     expect(authErrorMessage(null, "Something went wrong")).toBe("Something went wrong");
+  });
+
+  it("hides technical API messages from visitors", () => {
+    expect(isTechnicalUserMessage("Confirm migration 005 is applied")).toBe(true);
+    expect(
+      userFacingMessage("JWT expired", "Please try again."),
+    ).toBe("Please try again.");
   });
 });

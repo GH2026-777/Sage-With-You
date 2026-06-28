@@ -1,20 +1,18 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { Mail, Lock, User, AlertCircle, CheckCircle } from 'lucide-react';
+import { Mail, User, AlertCircle, CheckCircle } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
+import { PasswordInput } from '../components/PasswordInput';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { supabase } from '../../utils/supabase';
 import { AuthBrandHeader } from '../components/AuthBrandHeader';
 import { BackToHomeLink } from '../components/BackToHome';
 import {
   authErrorMessage,
-  isAuthEmailTimeout,
-  isExistingUserSignup,
 } from '../../utils/authErrorMessage';
 import { authEmailRedirect } from '../../utils/authRedirect';
 import { resendSignupConfirmation } from '../../utils/resendSignupConfirmation';
-import { initSupabaseAuth } from '../../utils/authSession';
 
 export function Join() {
   const navigate = useNavigate();
@@ -63,64 +61,34 @@ export function Join() {
     const emailRedirectTo = authEmailRedirect('/login');
 
     try {
-      await initSupabaseAuth();
-
-      const { data, error } = await supabase.auth.signUp({
-        email,
+      const { data, error: signErr } = await supabase.auth.signUp({
+        email: email.trim(),
         password,
         options: {
           emailRedirectTo,
           data: {
-            first_name: firstName,
-            last_name: lastName,
-            full_name: `${firstName} ${lastName}`,
+            first_name: firstName.trim(),
+            last_name: lastName.trim(),
+            full_name: `${firstName.trim()} ${lastName.trim()}`,
           },
         },
       });
 
-      if (error) throw error;
-
-      if (isExistingUserSignup(data)) {
-        setError(
-          'An account with this email already exists. Try signing in or use Forgot password.',
-        );
+      if (signErr) {
+        setError(authErrorMessage(signErr, 'Failed to create account. Please try again.'));
         return;
       }
 
-      if (data.user) {
-        setNeedsEmailConfirm(!data.session);
-        setSuccess(true);
-      } else {
-        setError(
-          'We could not finish creating your account. Please try again or contact us for help.',
-        );
+      if (data.session) {
+        navigate('/', { replace: true });
+        return;
       }
+
+      setNeedsEmailConfirm(true);
+      setSuccess(true);
     } catch (error: unknown) {
-      // Supabase often creates the user but times out while sending mail (504).
-      if (isAuthEmailTimeout(error)) {
-        setNeedsEmailConfirm(true);
-        setSuccess(true);
-        setResendInfo(
-          'Your account may already be set up. Check your email in a few minutes, then sign in. If nothing arrives, use Resend below once (not repeatedly).',
-        );
-        return;
-      }
-
-      const message = authErrorMessage(
-        error,
-        'Failed to create account. Please try again.',
-      );
-      const code =
-        typeof error === 'object' &&
-        error !== null &&
-        'code' in error &&
-        typeof (error as { code: unknown }).code === 'string'
-          ? (error as { code: string }).code
-          : '';
       setError(
-        import.meta.env.DEV && code
-          ? `${message} (code: ${code})`
-          : message,
+        authErrorMessage(error, 'Failed to create account. Please try again.'),
       );
     } finally {
       setIsLoading(false);
@@ -151,9 +119,18 @@ export function Join() {
             </h2>
             {needsEmailConfirm ? (
               <p className="text-gray-600 text-sm leading-relaxed">
-                We sent a confirmation link to{' '}
-                <span className="font-medium text-gray-900">{email}</span>.
-                Check your inbox and spam folder, then sign in.
+                Check your inbox at{' '}
+                <span className="font-medium text-gray-900">{email}</span>{' '}
+                for a confirmation link (check spam too). Then sign in. If you
+                already have an account, use{' '}
+                <Link to="/login" className="text-sage-700 underline underline-offset-2">
+                  Sign in
+                </Link>{' '}
+                or{' '}
+                <Link to="/forgot-password" className="text-sage-700 underline underline-offset-2">
+                  Forgot password
+                </Link>
+                .
               </p>
             ) : (
               <p className="text-gray-600 text-sm">
@@ -283,18 +260,15 @@ export function Join() {
                 <label htmlFor="password" className="text-sm font-medium text-gray-700">
                   Password
                 </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="pl-10"
-                  />
-                </div>
+                <PasswordInput
+                  id="password"
+                  visibilityLabel="password"
+                  autoComplete="new-password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
                 <p className="text-xs text-gray-500">
                   Must be at least 8 characters
                 </p>
@@ -304,18 +278,15 @@ export function Join() {
                 <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
                   Confirm Password
                 </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <Input
-                    id="confirmPassword"
-                    type="password"
-                    placeholder="••••••••"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    className="pl-10"
-                  />
-                </div>
+                <PasswordInput
+                  id="confirmPassword"
+                  visibilityLabel="confirm password"
+                  autoComplete="new-password"
+                  placeholder="••••••••"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
               </div>
 
               <Button
@@ -327,7 +298,7 @@ export function Join() {
               </Button>
             </form>
 
-            <div className="mt-6 text-center">
+            <div className="mt-6 text-center space-y-2">
               <p className="text-sm text-gray-600">
                 Already have an account?{' '}
                 <Link
@@ -335,6 +306,15 @@ export function Join() {
                   className="text-sage-600 hover:text-sage-700 font-medium hover:underline"
                 >
                   Sign in
+                </Link>
+              </p>
+              <p className="text-sm text-gray-600">
+                Need to reset your password?{' '}
+                <Link
+                  to="/forgot-password"
+                  className="font-medium text-gray-900 underline underline-offset-2 hover:text-sage-700"
+                >
+                  Forgot password
                 </Link>
               </p>
             </div>

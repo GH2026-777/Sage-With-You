@@ -3,19 +3,33 @@ import { Link, useNavigate } from "react-router";
 import {
   Bell,
   Cookie,
-  LogOut,
-  Mail,
+  Download,
   Shield,
   Trash2,
   User,
 } from "lucide-react";
+import {
+  buildAuthUserExport,
+  downloadAccountExport,
+} from "@site/account/export-account-data";
+import { deleteAccountWithEmailConfirm } from "@site/account/delete-account";
+import { displayNameFromMetadata } from "@site/account/display-name";
+import { updateDisplayName } from "@site/account/update-display-name";
 import { supabase } from "../../utils/supabase";
+import { authErrorMessage, userFacingMessage } from "../../utils/authErrorMessage";
 import {
   COOKIE_CONSENT_CHANGED_EVENT,
   clearCookieConsent,
   getCookieConsent,
   setCookieConsent,
 } from "../../lib/cookieConsent";
+import {
+  COMMUNICATION_PREF_FIELDS,
+  DEFAULT_COMMUNICATION_PREFS,
+  communicationPreferencesToMetadata,
+  readCommunicationPreferences,
+  type CommunicationPreferences,
+} from "../../lib/communicationPreferences";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
@@ -34,11 +48,6 @@ import {
 const cardClass = "border-gray-200 shadow-sm";
 
 type CookiePref = boolean | null;
-
-type CommPrefs = {
-  emailProgramUpdates: boolean;
-  emailResourceDigest: boolean;
-};
 
 function formatJoined(iso: string | undefined): string {
   if (!iso) return "N/A";
@@ -60,22 +69,8 @@ function cookiePrefFromStorage(): CookiePref {
   return null;
 }
 
-function readCommFromMetadata(meta: Record<string, unknown> | undefined): CommPrefs {
-  return {
-    emailProgramUpdates: meta?.swy_email_program_updates !== false,
-    emailResourceDigest: meta?.swy_email_resource_digest !== false,
-  };
-}
-
 function displayNameFromUser(meta: Record<string, unknown> | undefined, email: string | null): string {
-  const full = typeof meta?.full_name === "string" ? meta.full_name.trim() : "";
-  if (full) return full;
-  const first = typeof meta?.first_name === "string" ? meta.first_name.trim() : "";
-  const last = typeof meta?.last_name === "string" ? meta.last_name.trim() : "";
-  const combined = [first, last].filter(Boolean).join(" ").trim();
-  if (combined) return combined;
-  if (email) return email.split("@")[0] ?? "Member";
-  return "Member";
+  return displayNameFromMetadata(meta, email, "Member");
 }
 
 export function Account() {
@@ -85,16 +80,16 @@ export function Account() {
   const [userMeta, setUserMeta] = useState<Record<string, unknown>>({});
   const [signedIn, setSignedIn] = useState(false);
   const [cookiePref, setCookiePref] = useState<CookiePref>(null);
-  const [comm, setComm] = useState<CommPrefs>({
-    emailProgramUpdates: true,
-    emailResourceDigest: true,
-  });
+  const [comm, setComm] = useState<CommunicationPreferences>(DEFAULT_COMMUNICATION_PREFS);
   const [savedFlash, setSavedFlash] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteConfirmEmail, setDeleteConfirmEmail] = useState("");
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [profileName, setProfileName] = useState("");
+  const [profileSaving, setProfileSaving] = useState(false);
+  const [exportLoading, setExportLoading] = useState(false);
 
   const syncCookieFromStorage = useCallback(() => {
     setCookiePref(cookiePrefFromStorage());
@@ -116,7 +111,8 @@ export function Account() {
         setSessionEmail(session.user.email ?? null);
         setJoinedAt(session.user.created_at);
         setUserMeta((session.user.user_metadata ?? {}) as Record<string, unknown>);
-        setComm(readCommFromMetadata(session.user.user_metadata as Record<string, unknown>));
+        setComm(readCommunicationPreferences(session.user.user_metadata as Record<string, unknown>));
+        setProfileName(displayNameFromUser(session.user.user_metadata as Record<string, unknown>, session.user.email ?? null));
       } else {
         setSignedIn(false);
         setSessionEmail(null);
@@ -132,7 +128,8 @@ export function Account() {
         setSessionEmail(session.user.email ?? null);
         setJoinedAt(session.user.created_at);
         setUserMeta((session.user.user_metadata ?? {}) as Record<string, unknown>);
-        setComm(readCommFromMetadata(session.user.user_metadata as Record<string, unknown>));
+        setComm(readCommunicationPreferences(session.user.user_metadata as Record<string, unknown>));
+        setProfileName(displayNameFromUser(session.user.user_metadata as Record<string, unknown>, session.user.email ?? null));
       } else {
         setSignedIn(false);
         setSessionEmail(null);
@@ -165,24 +162,16 @@ export function Account() {
     }
 
     const { error } = await supabase.auth.updateUser({
-      data: {
-        swy_email_program_updates: comm.emailProgramUpdates,
-        swy_email_resource_digest: comm.emailResourceDigest,
-      },
+      data: communicationPreferencesToMetadata(comm),
     });
 
     if (error) {
-      setErrorMsg(error.message);
+      setErrorMsg(authErrorMessage(error, "We could not save your settings. Please try again."));
       return;
     }
     setSavedFlash(true);
     window.setTimeout(() => setSavedFlash(false), 2000);
   }, [signedIn, cookiePref, comm]);
-
-  const signOut = async () => {
-    await supabase.auth.signOut();
-    navigate("/");
-  };
 
   const handleDeleteAccount = async () => {
     setDeleteError(null);
@@ -193,21 +182,57 @@ export function Account() {
       return;
     }
     setDeleteLoading(true);
-    const { data, error: fnError } = await supabase.functions.invoke("delete-account", {
-      body: { confirmEmail: typed },
-    });
+    const result = await deleteAccountWithEmailConfirm(supabase, typed);
     setDeleteLoading(false);
 
-    const body = data as { ok?: boolean; error?: string; detail?: string } | null;
-    if (body?.ok === true) {
+    if (result.ok) {
       setDeleteDialogOpen(false);
       await supabase.auth.signOut();
       navigate("/", { replace: true });
       return;
     }
 
-    const fromBody = body?.detail || body?.error;
-    setDeleteError(fromBody || fnError?.message || "Could not delete account.");
+    setDeleteError(
+      userFacingMessage(result.error, "We could not delete your account. Please try again."),
+    );
+  };
+
+  const handleProfileSave = async () => {
+    setErrorMsg(null);
+    setProfileSaving(true);
+    const { user, error } = await updateDisplayName(supabase, profileName);
+    setProfileSaving(false);
+    if (error) {
+      setErrorMsg(userFacingMessage(error, "We could not update your profile."));
+      return;
+    }
+    if (user) {
+      setUserMeta((user.user_metadata ?? {}) as Record<string, unknown>);
+      setProfileName(displayNameFromUser(user.user_metadata as Record<string, unknown>, user.email ?? null));
+    }
+    setSavedFlash(true);
+    window.setTimeout(() => setSavedFlash(false), 2000);
+  };
+
+  const handleExportData = async () => {
+    setExportLoading(true);
+    setErrorMsg(null);
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error("Sign in to export your data.");
+      downloadAccountExport(
+        buildAuthUserExport(user, "Sage With You", {
+          communication_preferences: readCommunicationPreferences(user.user_metadata as Record<string, unknown>),
+        }),
+        "sage-with-you",
+      );
+    } catch (err) {
+      setErrorMsg(userFacingMessage(err instanceof Error ? err.message : null, "Export failed. Please try again."));
+    } finally {
+      setExportLoading(false);
+    }
   };
 
   const displayName = displayNameFromUser(userMeta, sessionEmail);
@@ -218,8 +243,7 @@ export function Account() {
     <div className="pb-16">
       <section className="bg-gradient-to-br from-sage-50 to-sage-50 py-12 md:py-16">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-            <div className="flex items-start gap-4">
+          <div className="flex items-start gap-4">
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-sage-600 text-white shadow-md">
                 <User className="h-7 w-7" aria-hidden />
               </div>
@@ -229,8 +253,8 @@ export function Account() {
                 </h1>
                 <p className="mt-2 max-w-2xl text-gray-700">
                   {signedIn
-                    ? "Profile, cookies, email preferences, and security, aligned with other SageÉlan sites (shared cookie_consent storage)."
-                    : "Cookie choices on this device. Sign in to sync email preferences to your profile."}
+                    ? "Manage your profile, cookie choices, communication preferences, and account security."
+                    : "Cookie choices on this device. Sign in to save communication preferences to your account."}
                 </p>
                 {signedIn && sessionEmail && (
                   <p className="mt-1 text-sm text-gray-600">
@@ -240,18 +264,6 @@ export function Account() {
                   </p>
                 )}
               </div>
-            </div>
-            {signedIn && (
-              <div className="flex shrink-0 flex-wrap gap-2 md:justify-end">
-                <Button type="button" className="bg-sage-600 hover:bg-sage-700" onClick={() => void persist()}>
-                  Save changes
-                </Button>
-                <Button type="button" variant="outline" className="border-gray-300" onClick={() => void signOut()}>
-                  <LogOut className="h-4 w-4" />
-                  Sign out
-                </Button>
-              </div>
-            )}
           </div>
         </div>
       </section>
@@ -272,7 +284,7 @@ export function Account() {
               <CardHeader>
                 <CardTitle>Sign in for more</CardTitle>
                 <CardDescription>
-                  Save email preferences to your Supabase profile and manage password reset from one place.
+                  Save communication preferences to your account and reset your password from one place.
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex flex-wrap gap-3">
@@ -291,8 +303,8 @@ export function Account() {
                   Cookies
                 </CardTitle>
                 <CardDescription>
-                  Shared <code className="rounded bg-gray-100 px-1 text-xs">cookie_consent</code> key with other
-                  SageÉlan sites (e.g. Sage Panthers) so your choice can stay consistent.
+                  Your choice is saved on this browser. The same preference may apply on other SageÉlan
+                  Foundation sites you visit.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">{cookieRadios(cookiePref, setCookiePref)}</CardContent>
@@ -314,9 +326,9 @@ export function Account() {
                 <Cookie className="h-4 w-4 shrink-0 opacity-70" />
                 Privacy
               </TabsTrigger>
-              <TabsTrigger value="email" className="justify-start gap-2 px-3 py-2.5">
+              <TabsTrigger value="communication" className="justify-start gap-2 px-3 py-2.5">
                 <Bell className="h-4 w-4 shrink-0 opacity-70" />
-                Email
+                Communication
               </TabsTrigger>
               <TabsTrigger value="security" className="justify-start gap-2 px-3 py-2.5">
                 <Shield className="h-4 w-4 shrink-0 opacity-70" />
@@ -325,26 +337,41 @@ export function Account() {
             </TabsList>
 
             <div className="min-w-0 flex-1 space-y-6">
-              <TabsContent value="profile" className="mt-0 space-y-6 outline-none">
+              <TabsContent value="profile" className="mt-0 outline-none">
                 <Card className={cardClass}>
                   <CardHeader>
-                    <CardTitle>Your profile</CardTitle>
-                    <CardDescription>Information from your Sage With You account.</CardDescription>
+                    <CardTitle>Profile</CardTitle>
+                    <CardDescription>
+                      Your display name appears in greetings and account summaries across Sage With You.
+                    </CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    <dl className="grid gap-4 text-sm sm:grid-cols-2">
-                      <div className="rounded-lg border border-gray-100 bg-gray-50/80 p-4">
-                        <dt className="flex items-center gap-1.5 text-gray-500">
-                          <Mail className="h-3.5 w-3.5" />
-                          Email
-                        </dt>
-                        <dd className="mt-1 font-medium text-gray-900 break-all">{sessionEmail ?? "N/A"}</dd>
-                      </div>
-                      <div className="rounded-lg border border-gray-100 bg-gray-50/80 p-4">
-                        <dt className="text-gray-500">Member since</dt>
-                        <dd className="mt-1 font-medium text-gray-900">{formatJoined(joinedAt)}</dd>
-                      </div>
-                    </dl>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="profile-name">Display name</Label>
+                      <Input
+                        id="profile-name"
+                        value={profileName}
+                        onChange={(e) => setProfileName(e.target.value)}
+                        className="max-w-md border-gray-300 bg-white"
+                        autoComplete="name"
+                      />
+                    </div>
+                    <div className="space-y-1 text-sm text-gray-600">
+                      <p>
+                        <span className="font-medium text-gray-800">Email:</span> {sessionEmail}
+                      </p>
+                      <p>
+                        <span className="font-medium text-gray-800">Member since:</span> {formatJoined(joinedAt)}
+                      </p>
+                    </div>
+                    <Button
+                      type="button"
+                      className="bg-sage-600 hover:bg-sage-700"
+                      disabled={profileSaving || !profileName.trim()}
+                      onClick={() => void handleProfileSave()}
+                    >
+                      {profileSaving ? "Saving…" : "Save profile"}
+                    </Button>
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -365,32 +392,78 @@ export function Account() {
                       .
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-3">{cookieRadios(cookiePref, setCookiePref)}</CardContent>
+                  <CardContent className="space-y-5">
+                    {cookieRadios(cookiePref, setCookiePref)}
+                    <div className="border-t border-gray-100 pt-4">
+                      <Button
+                        type="button"
+                        className="bg-sage-600 hover:bg-sage-700"
+                        onClick={() => void persist()}
+                      >
+                        Save cookie preference
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className={cardClass}>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Download className="h-5 w-5 text-sage-600" />
+                      Export your data
+                    </CardTitle>
+                    <CardDescription>
+                      Download a JSON copy of your account profile and communication preferences.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="border-gray-300"
+                      disabled={exportLoading}
+                      onClick={() => void handleExportData()}
+                    >
+                      {exportLoading ? "Preparing export…" : "Download data export"}
+                    </Button>
+                  </CardContent>
                 </Card>
               </TabsContent>
 
-              <TabsContent value="email" className="mt-0 outline-none">
+              <TabsContent value="communication" className="mt-0 outline-none">
                 <Card className={cardClass}>
                   <CardHeader>
-                    <CardTitle>Email preferences</CardTitle>
+                    <CardTitle>Communication preferences</CardTitle>
                     <CardDescription>
-                      Transactional mail (sign-in, password reset) may still be sent. These toggles are for optional
-                      updates when those mailings exist.
+                      Transactional email (sign-in, password reset, security) may still be sent when required.
+                      These toggles control optional messages from Sage With You and the SageÉlan Foundation. We
+                      honor your choices when those mailings are sent.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-5">
-                    <ToggleRow
-                      title="Program & Sage With You updates"
-                      description="Newsletters and general news from the foundation."
-                      on={comm.emailProgramUpdates}
-                      onToggle={() => setComm((p) => ({ ...p, emailProgramUpdates: !p.emailProgramUpdates }))}
-                    />
-                    <ToggleRow
-                      title="Resources & library highlights"
-                      description="Occasional digests when new materials are published."
-                      on={comm.emailResourceDigest}
-                      onToggle={() => setComm((p) => ({ ...p, emailResourceDigest: !p.emailResourceDigest }))}
-                    />
+                  <CardContent className="space-y-4">
+                    {COMMUNICATION_PREF_FIELDS.map((field) => (
+                      <ToggleRow
+                        key={field.key}
+                        title={field.title}
+                        description={field.description}
+                        on={comm[field.key]}
+                        onToggle={() =>
+                          setComm((p) => ({
+                            ...p,
+                            [field.key]: !p[field.key],
+                          }))
+                        }
+                      />
+                    ))}
+                    <div className="border-t border-gray-100 pt-4">
+                      <Button
+                        type="button"
+                        className="bg-sage-600 hover:bg-sage-700"
+                        onClick={() => void persist()}
+                      >
+                        Save communication preferences
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -475,8 +548,8 @@ export function Account() {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete account permanently?</AlertDialogTitle>
             <AlertDialogDescription className="text-gray-600">
-              You will be signed out and your profile will be removed from Supabase Auth. If you need a copy of any
-              data, export or save it before continuing.
+              You will be signed out and your account will be permanently deleted. If you need a copy of any
+              data, save it before continuing.
             </AlertDialogDescription>
             {deleteError && (
               <p className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900">{deleteError}</p>

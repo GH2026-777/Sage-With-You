@@ -1,5 +1,7 @@
-import { BookOpen, Users, Home, HeartHandshake, GraduationCap, Lightbulb } from "lucide-react";
+import { Link } from "react-router";
+import { BookOpen, Users, Home, HeartHandshake, GraduationCap, Lightbulb, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Button } from "../components/ui/button";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 
 export function Programs() {
@@ -7,6 +9,7 @@ export function Programs() {
     {
       icon: GraduationCap,
       title: "Aging Education",
+      href: "/educational-resources",
       description:
         "Comprehensive educational programs covering physical, emotional, and social aspects of aging. Learn about health maintenance, mobility, cognitive wellness, and strategies for staying active and engaged.",
       topics: [
@@ -19,6 +22,7 @@ export function Programs() {
     {
       icon: HeartHandshake,
       title: "Caregiver Support",
+      href: "/caregiver-support",
       description:
         "Specialized training and resources for family members and professional caregivers. Gain practical skills, emotional support strategies, and self-care techniques to provide the best care while maintaining your own wellbeing.",
       topics: [
@@ -31,6 +35,7 @@ export function Programs() {
     {
       icon: Home,
       title: "Home Safety & Adaptation",
+      href: "/living-in-place",
       description:
         "Practical guidance on creating a safe, accessible, and comfortable home environment. Learn about modifications, assistive technologies, and environmental design that support independence.",
       topics: [
@@ -43,6 +48,7 @@ export function Programs() {
     {
       icon: Users,
       title: "Family & Community",
+      href: "/person-centered-care",
       description:
         "Programs that strengthen family connections and community engagement. Explore strategies for maintaining social connections, involving family in care decisions, and accessing community resources.",
       topics: [
@@ -55,6 +61,7 @@ export function Programs() {
     {
       icon: BookOpen,
       title: "Health Literacy",
+      href: "/educational-resources",
       description:
         "Educational initiatives focused on understanding health information, navigating healthcare systems, and making informed decisions about medical care and wellness.",
       topics: [
@@ -67,6 +74,7 @@ export function Programs() {
     {
       icon: Lightbulb,
       title: "Planning & Decision Making",
+      href: "/resources",
       description:
         "Resources for advance planning, including legal considerations, financial planning, and care preferences. Make informed decisions about your future with confidence and clarity.",
       topics: [
@@ -123,11 +131,11 @@ export function Programs() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {programs.map((program, index) => {
+            {programs.map((program) => {
               const Icon = program.icon;
               return (
                 <Card
-                  key={index}
+                  key={program.title}
                   className="border-gray-200 hover:shadow-lg transition-shadow"
                 >
                   <CardHeader>
@@ -145,9 +153,9 @@ export function Programs() {
                         Key Topics:
                       </p>
                       <ul className="space-y-1">
-                        {program.topics.map((topic, idx) => (
+                        {program.topics.map((topic) => (
                           <li
-                            key={idx}
+                            key={topic}
                             className="text-sm text-gray-600 flex items-start"
                           >
                             <span className="text-sage-600 mr-2">•</span>
@@ -155,6 +163,15 @@ export function Programs() {
                           </li>
                         ))}
                       </ul>
+                      {"href" in program && (
+                        <Link
+                          to={program.href}
+                          className="mt-4 inline-flex items-center text-sm font-medium text-sage-700 hover:underline"
+                        >
+                          Learn more
+                          <ArrowRight className="ml-1 h-4 w-4" aria-hidden />
+                        </Link>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -208,6 +225,17 @@ export function Programs() {
             Explore our resources or reach out to learn more about how our
             educational initiatives can support you or your loved ones.
           </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Button asChild size="lg" variant="secondary" className="bg-white text-sage-800 hover:bg-sage-50">
+              <Link to="/resources">
+                Browse resources
+                <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-sage-700">
+              <Link to="/contact">Contact us</Link>
+            </Button>
+          </div>
         </div>
       </section>
     </div>

@@ -1,8 +1,10 @@
 /**
  * Microsoft 365 SMTP for Edge Functions (contact form + auth send-email hook).
  * Secrets: CONTACT_SMTP_HOST, CONTACT_SMTP_PORT, CONTACT_SMTP_USER, CONTACT_SMTP_PASS, CONTACT_SMTP_FROM
+ *
+ * Uses nodemailer via npm (esm.sh breaks TLS on Supabase Edge: tlssock._start is not a function).
  */
-import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts";
+import nodemailer from "npm:nodemailer@6.9.16";
 
 function smtpUseImplicitTls(port: number): boolean {
   return port === 465;
@@ -34,29 +36,27 @@ export async function sendOffice365Mail(params: {
     throw new Error("missing_smtp_config");
   }
 
-  const client = new SMTPClient({
-    connection: {
-      hostname: host,
-      port,
-      tls: smtpUseImplicitTls(port),
-      auth: { username: user, password: pass },
-    },
+  const transport = nodemailer.createTransport({
+    host,
+    port,
+    secure: smtpUseImplicitTls(port),
+    auth: { user, pass },
+    requireTLS: !smtpUseImplicitTls(port) && port === 587,
+    connectionTimeout: 10_000,
+    greetingTimeout: 10_000,
+    socketTimeout: 15_000,
   });
 
   try {
-    await client.send({
+    await transport.sendMail({
       from,
       to: params.to,
       subject: params.subject,
-      content: params.plain,
+      text: params.plain,
       html: params.html,
       ...(bcc ? { bcc } : {}),
     });
   } finally {
-    try {
-      await client.close();
-    } catch {
-      /* ignore */
-    }
+    await transport.close();
   }
 }

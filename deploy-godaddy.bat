@@ -97,10 +97,12 @@ echo ^</IfModule^>
 echo    .htaccess created with React Router support
 echo.
 
-REM Create zip
+REM Create zip (dated filename keeps prior deploys for rollback)
 echo [6/7] Creating deployment zip...
-if exist "sageelan-staging-deploy.zip" del /f /q "sageelan-staging-deploy.zip"
-powershell Compress-Archive -Path "dist\*" -DestinationPath "sageelan-staging-deploy.zip" -Force
+for /f %%i in ('powershell -NoProfile -Command "Get-Date -Format yyyy-MM-dd"') do set "DEPLOY_DATE=%%i"
+set "ZIPNAME=sageelan-staging-deploy-%DEPLOY_DATE%.zip"
+echo    Output: %ZIPNAME%
+call "%~dp0..\scripts\create-deploy-zip.bat" dist "%ZIPNAME%"
 if errorlevel 1 (
     echo ERROR: Failed to create zip file!
     pause
@@ -115,10 +117,10 @@ echo ============================================
 echo SUCCESS! Deployment package ready.
 echo ============================================
 echo.
-echo File: sageelan-staging-deploy.zip
-echo Location: %CD%\sageelan-staging-deploy.zip
+echo File: %ZIPNAME%
+echo Location: %CD%\%ZIPNAME%
 echo Size: 
-powershell -command "(Get-Item 'sageelan-staging-deploy.zip').length/1MB -as [int]" 2>nul && echo MB
+powershell -command "(Get-Item '%ZIPNAME%').length/1MB -as [int]" 2>nul && echo MB
 echo.
 echo ============================================
 echo GODADDY UPLOAD INSTRUCTIONS:
@@ -129,7 +131,7 @@ echo 2. Go to File Manager
 echo 3. Navigate to public_html (or your staging subdirectory)
 echo    Example: public_html/staging/sageelan/
 echo 4. Delete all existing files in that directory
-echo 5. Upload sageelan-staging-deploy.zip
+echo 5. Upload %ZIPNAME%
 echo 6. Right-click the zip file and select "Extract"
 echo 7. Delete the zip file from server after extraction
 echo.

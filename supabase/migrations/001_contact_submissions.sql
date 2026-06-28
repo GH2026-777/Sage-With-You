@@ -19,12 +19,14 @@ comment on table public.contact_submissions is
 
 alter table public.contact_submissions enable row level security;
 
+drop policy if exists "contact_submissions_anon_insert" on public.contact_submissions;
 create policy "contact_submissions_anon_insert"
   on public.contact_submissions
   for insert
   to anon
   with check (true);
 
+drop policy if exists "contact_submissions_authenticated_insert" on public.contact_submissions;
 create policy "contact_submissions_authenticated_insert"
   on public.contact_submissions
   for insert

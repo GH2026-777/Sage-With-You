@@ -1,5 +1,8 @@
-import { Heart, Target, Eye, Award } from "lucide-react";
+import { Heart, Target, Eye, Award, ArrowRight } from "lucide-react";
 import { Card, CardContent } from "../components/ui/card";
+import { Button } from "../components/ui/button";
+
+const FOUNDATION_BOARD_URL = "https://sageelan.org/board";
 
 export function About() {
   const values = [
@@ -172,6 +175,14 @@ export function About() {
               environments where aging in place is not just possible, but
               fulfilling, where individuals can maintain their independence,
               dignity, and quality of life in the comfort of their own homes.
+            </p>
+            <p className="mt-8 text-center">
+              <Button asChild variant="outline" className="border-sage-600 text-sage-700 hover:bg-sage-50">
+                <a href={FOUNDATION_BOARD_URL} target="_blank" rel="noopener noreferrer">
+                  Meet our Board of Directors
+                  <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
+                </a>
+              </Button>
             </p>
           </div>
         </div>

@@ -24,7 +24,7 @@
  * Run migration `002_contact_submissions_edge_only.sql` so the browser cannot insert directly (only this function).
  */
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
-import { SMTPClient } from "https://deno.land/x/denomailer@1.6.0/mod.ts";
+import { sendOffice365Mail } from "../_shared/office365-smtp.ts";
 
 const corsHeaders: Record<string, string> = {
   "Access-Control-Allow-Origin": "*",
@@ -33,10 +33,6 @@ const corsHeaders: Record<string, string> = {
 };
 
 const MAX = { name: 200, email: 320, phone: 60, subject: 200, message: 12000 };
-
-function smtpUseImplicitTls(port: number): boolean {
-  return port === 465;
-}
 
 function escHtml(s: string): string {
   return s
@@ -73,17 +69,6 @@ async function sendConfirmationSmtp(
   subjectLine: string,
   bodyText: string,
 ): Promise<void> {
-  const host = Deno.env.get("CONTACT_SMTP_HOST")?.trim() ?? "smtp.office365.com";
-  const port = Number(Deno.env.get("CONTACT_SMTP_PORT")?.trim() ?? "587");
-  const user = Deno.env.get("CONTACT_SMTP_USER")?.trim();
-  const pass = Deno.env.get("CONTACT_SMTP_PASS")?.trim();
-  const from = Deno.env.get("CONTACT_SMTP_FROM")?.trim();
-  const bcc = Deno.env.get("CONTACT_SMTP_BCC")?.trim();
-
-  if (!user || !pass || !from) {
-    throw new Error("missing_smtp_config");
-  }
-
   const nameH = escHtml(displayName || "there");
   const subjH = escHtml(subjectLine);
   const bodyH = escHtml(bodyText);
@@ -100,31 +85,12 @@ async function sendConfirmationSmtp(
 
   const plain = `Hi ${displayName || "there"},\n\nWe received your message (subject: ${subjectLine}). We'll get back to you soon.\n\n---\n${bodyText}`;
 
-  const client = new SMTPClient({
-    connection: {
-      hostname: host,
-      port,
-      tls: smtpUseImplicitTls(port),
-      auth: { username: user, password: pass },
-    },
+  await sendOffice365Mail({
+    to,
+    subject: `We received your message: ${subjectLine.slice(0, 80)}${subjectLine.length > 80 ? "…" : ""}`,
+    html,
+    plain,
   });
-
-  try {
-    await client.send({
-      from,
-      to,
-      subject: `We received your message: ${subjectLine.slice(0, 80)}${subjectLine.length > 80 ? "…" : ""}`,
-      content: plain,
-      html,
-      ...(bcc ? { bcc } : {}),
-    });
-  } finally {
-    try {
-      await client.close();
-    } catch {
-      /* ignore */
-    }
-  }
 }
 
 Deno.serve(async (req) => {

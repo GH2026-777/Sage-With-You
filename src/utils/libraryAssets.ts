@@ -1,9 +1,5 @@
 import { supabase } from "./supabase";
 
-/** Sample PDF when not using Supabase Storage (local/demo). */
-export const LIBRARY_SAMPLE_PDF =
-  "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
-
 export type LibraryResourceType = "guide" | "checklist" | "video" | "article";
 
 /** When true, library links use public Storage URLs (upload files first). */
@@ -65,10 +61,6 @@ export function resolveLibraryFileUrl(input: {
 
   if (libraryAssetsUseSupabaseStorage()) {
     return libraryPublicUrlForPath(path);
-  }
-
-  if (input.format === "PDF" && (input.type === "checklist" || input.type === "guide")) {
-    return LIBRARY_SAMPLE_PDF;
   }
 
   return undefined;

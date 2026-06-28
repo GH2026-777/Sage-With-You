@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { Lock, AlertCircle, CheckCircle } from 'lucide-react';
+import { AlertCircle, CheckCircle } from 'lucide-react';
 import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
+import { PasswordInput } from '../components/PasswordInput';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { supabase } from '../../utils/supabase';
 import { AuthBrandHeader } from '../components/AuthBrandHeader';
@@ -38,8 +38,8 @@ export function ResetPassword() {
       return;
     }
 
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters long');
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters long');
       setIsLoading(false);
       return;
     }
@@ -117,20 +117,17 @@ export function ResetPassword() {
                 <label htmlFor="password" className="text-sm font-medium text-gray-700">
                   New Password
                 </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="pl-10"
-                  />
-                </div>
+                <PasswordInput
+                  id="password"
+                  visibilityLabel="new password"
+                  autoComplete="new-password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
                 <p className="text-xs text-gray-500">
-                  Must be at least 6 characters
+                  Must be at least 8 characters
                 </p>
               </div>
 
@@ -138,18 +135,15 @@ export function ResetPassword() {
                 <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
                   Confirm New Password
                 </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <Input
-                    id="confirmPassword"
-                    type="password"
-                    placeholder="••••••••"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    className="pl-10"
-                  />
-                </div>
+                <PasswordInput
+                  id="confirmPassword"
+                  visibilityLabel="confirm new password"
+                  autoComplete="new-password"
+                  placeholder="••••••••"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
               </div>
 
               <Button

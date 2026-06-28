@@ -1,3 +1,5 @@
+import { useEffect, type ReactNode } from "react";
+import { Link, useLocation } from "react-router";
 import {
   FileText,
   Video,
@@ -5,11 +7,24 @@ import {
   CheckCircle,
   Phone,
   Globe,
+  Award,
+  ArrowRight,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../components/ui/accordion";
+import { Button } from "../components/ui/button";
 
 export function Resources() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash === "#faq") {
+      window.requestAnimationFrame(() => {
+        document.getElementById("faq")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+  }, [location.pathname, location.hash]);
+
   const resourceCategories = [
     {
       icon: FileText,
@@ -61,7 +76,61 @@ export function Resources() {
     },
   ];
 
-  const faqs = [
+  const faqs: { question: string; answer: ReactNode }[] = [
+    {
+      question: "What is the Sage Badge?",
+      answer: (
+        <p>
+          The Sage Badge is a recognition program for organizations that support aging safely and
+          confidently at home. Companies are evaluated on <strong>The Sage Standard</strong> (seven
+          evidence-informed pillars) and community feedback through What People Are Experiencing
+          (WPE). Visit the{" "}
+          <Link to="/sage-badge" className="font-medium text-sage-700 hover:underline">
+            Sage Badge overview
+          </Link>
+          ,{" "}
+          <Link to="/sage-badge/companies" className="font-medium text-sage-700 hover:underline">
+            browse verified companies
+          </Link>
+          , or{" "}
+          <Link to="/sage-badge/for-companies" className="font-medium text-sage-700 hover:underline">
+            inquire as an organization
+          </Link>
+          .
+        </p>
+      ),
+    },
+    {
+      question: "How does an organization earn Sage Verified status?",
+      answer: (
+        <p>
+          Trained Sage assessors score each organization on The Sage Standard. Ready, Trusted, and
+          Exceptional levels earn a public Sage Verified designation. Organizations can request an
+          assessment or improvement support through the{" "}
+          <Link to="/sage-badge/for-companies" className="font-medium text-sage-700 hover:underline">
+            organizations page
+          </Link>
+          .
+        </p>
+      ),
+    },
+    {
+      question: "Can I share feedback about a Sage Verified company?",
+      answer: (
+        <p>
+          Yes. Signed-in community members can submit structured experience feedback (WPE) for
+          published companies. Submissions are moderated per our{" "}
+          <Link to="/sage-badge/wpe-policy" className="font-medium text-sage-700 hover:underline">
+            WPE policy
+          </Link>
+          . Learn more on{" "}
+          <Link to="/sage-badge/experience" className="font-medium text-sage-700 hover:underline">
+            Share your experience
+          </Link>
+          .
+        </p>
+      ),
+    },
     {
       question: "What does 'Living in Place' mean?",
       answer:
@@ -79,8 +148,23 @@ export function Resources() {
     },
     {
       question: "How can I access these resources?",
-      answer:
-        "Resources are being developed and will be made available through the SageÉlan Foundation's Sage With You program. For information about accessing current materials or upcoming educational initiatives, please contact us through our contact page.",
+      answer: (
+        <p>
+          Browse the{" "}
+          <Link to="/library" className="font-medium text-sage-700 hover:underline">
+            resource library
+          </Link>
+          , use our{" "}
+          <Link to="/assessments" className="font-medium text-sage-700 hover:underline">
+            self-assessments
+          </Link>
+          , or{" "}
+          <Link to="/contact" className="font-medium text-sage-700 hover:underline">
+            contact us
+          </Link>{" "}
+          if you need a specific guide that is not yet published.
+        </p>
+      ),
     },
     {
       question: "What topics do your educational programs cover?",
@@ -100,9 +184,9 @@ export function Resources() {
       title: "National Resources",
       description: "Connect with national organizations supporting aging in place",
       links: [
-        "Eldercare Locator (eldercare.acl.gov)",
-        "National Institute on Aging (nia.nih.gov)",
-        "Family Caregiver Alliance (caregiver.org)",
+        { label: "Eldercare Locator", href: "https://eldercare.acl.gov/" },
+        { label: "National Institute on Aging", href: "https://www.nia.nih.gov/" },
+        { label: "Family Caregiver Alliance", href: "https://www.caregiver.org/" },
       ],
     },
     {
@@ -110,9 +194,11 @@ export function Resources() {
       title: "Community Support",
       description: "Find local resources and community programs in your area",
       links: [
-        "Area Agencies on Aging",
-        "Local Senior Centers",
-        "Community Health Services",
+        {
+          label: "Eldercare Locator (local Area Agencies on Aging)",
+          href: "https://eldercare.acl.gov/",
+        },
+        { label: "USA.gov senior resources", href: "https://www.usa.gov/seniors" },
       ],
     },
   ];
@@ -147,11 +233,11 @@ export function Resources() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            {resourceCategories.map((category, index) => {
+            {resourceCategories.map((category) => {
               const Icon = category.icon;
               return (
                 <Card
-                  key={index}
+                  key={category.title}
                   className="border-gray-200 hover:shadow-lg transition-shadow"
                 >
                   <CardHeader>
@@ -165,9 +251,9 @@ export function Resources() {
                   <CardContent>
                     <p className="text-gray-600 mb-4">{category.description}</p>
                     <ul className="space-y-2">
-                      {category.items.map((item, idx) => (
+                      {category.items.map((item) => (
                         <li
-                          key={idx}
+                          key={item}
                           className="text-sm text-gray-700 flex items-start"
                         >
                           <span className="text-sage-600 mr-2">•</span>
@@ -215,13 +301,17 @@ export function Resources() {
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-2">
-                      {section.links.map((link, idx) => (
-                        <li
-                          key={idx}
-                          className="text-sm text-gray-700 flex items-start"
-                        >
+                      {section.links.map((link) => (
+                        <li key={link.href} className="text-sm text-gray-700 flex items-start">
                           <span className="text-sage-600 mr-2">•</span>
-                          <span>{link}</span>
+                          <a
+                            href={link.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sage-700 font-medium hover:underline"
+                          >
+                            {link.label}
+                          </a>
                         </li>
                       ))}
                     </ul>
@@ -234,16 +324,47 @@ export function Resources() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 bg-white">
+      <section id="faq" className="py-20 bg-white scroll-mt-24">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl mb-4 text-gray-900">
               Frequently Asked Questions
             </h2>
             <p className="text-xl text-gray-600">
-              Common questions about our programs and living in place.
+              Common questions about our programs, Sage Badge, and living in place.
             </p>
           </div>
+
+          <Card className="mb-10 border-sage-200 bg-gradient-to-br from-sage-50 to-white shadow-sm">
+            <CardContent className="pt-6">
+              <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex gap-4">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-sage-100">
+                    <Award className="h-6 w-6 text-sage-700" aria-hidden />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900">Sage Badge</h3>
+                    <p className="mt-2 text-gray-700 leading-relaxed">
+                      Recognize organizations that meet The Sage Standard for supporting living in
+                      place. Explore verified companies, learn how scoring works, or request
+                      assessment for your organization.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-3 shrink-0">
+                  <Button asChild className="bg-sage-600 hover:bg-sage-700">
+                    <Link to="/sage-badge">
+                      Explore Sage Badge
+                      <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" className="border-sage-600 text-sage-700">
+                    <Link to="/sage-badge/companies">Verified companies</Link>
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
           <Accordion type="single" collapsible className="w-full">
             {faqs.map((faq, index) => (
@@ -251,8 +372,8 @@ export function Resources() {
                 <AccordionTrigger className="text-left text-lg text-gray-900">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-gray-700">
-                  {faq.answer}
+                <AccordionContent className="text-gray-700 leading-relaxed">
+                  {typeof faq.answer === "string" ? <p>{faq.answer}</p> : faq.answer}
                 </AccordionContent>
               </AccordionItem>
             ))}
@@ -270,6 +391,14 @@ export function Resources() {
             Contact us to learn more about accessing our resources or to ask
             questions about our programs.
           </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Button asChild size="lg" variant="secondary" className="bg-white text-sage-800 hover:bg-sage-50">
+              <Link to="/library">Resource library</Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-sage-700">
+              <Link to="/contact">Contact us</Link>
+            </Button>
+          </div>
         </div>
       </section>
     </div>

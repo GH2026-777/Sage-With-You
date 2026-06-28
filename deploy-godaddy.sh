@@ -98,12 +98,12 @@ EOF
 echo "   .htaccess created with React Router support"
 echo ""
 
-# Create zip
+# Create zip (unix 0644 for cPanel)
 echo "[6/7] Creating deployment zip..."
-rm -f sageelan-staging-deploy.zip
-cd dist
-zip -r ../sageelan-staging-deploy.zip *
-cd ..
+DEPLOY_DATE=$(date +%Y-%m-%d)
+ZIPNAME="sageelan-staging-deploy-${DEPLOY_DATE}.zip"
+echo "   Output: $ZIPNAME"
+"$(cd "$(dirname "$0")/.." && pwd)/scripts/create-deploy-zip.sh" dist "$ZIPNAME"
 if [ $? -ne 0 ]; then
     echo "ERROR: Failed to create zip file!"
     read -p "Press enter to exit..."
@@ -118,9 +118,9 @@ echo "============================================"
 echo "SUCCESS! Deployment package ready."
 echo "============================================"
 echo ""
-echo "File: sageelan-staging-deploy.zip"
-echo "Location: $(pwd)/sageelan-staging-deploy.zip"
-echo "Size: $(du -h sageelan-staging-deploy.zip | cut -f1)"
+echo "File: $ZIPNAME"
+echo "Location: $(pwd)/$ZIPNAME"
+echo "Size: $(du -h "$ZIPNAME" | cut -f1)"
 echo ""
 echo "============================================"
 echo "GODADDY UPLOAD INSTRUCTIONS:"
@@ -131,7 +131,7 @@ echo "2. Go to File Manager"
 echo "3. Navigate to public_html (or your staging subdirectory)"
 echo "   Example: public_html/staging/sageelan/"
 echo "4. Delete all existing files in that directory"
-echo "5. Upload sageelan-staging-deploy.zip"
+echo "5. Upload $ZIPNAME"
 echo "6. Right-click the zip file and select \"Extract\""
 echo "7. Delete the zip file from server after extraction"
 echo ""

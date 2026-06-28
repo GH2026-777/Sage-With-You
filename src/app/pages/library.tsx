@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { Link } from "react-router";
 import {
   Search,
   Download,
@@ -29,6 +30,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
 import { loadSavedResourceIds, persistSavedResourceIds } from "../../utils/librarySaved";
 import {
   libraryAssetsUseSupabaseStorage,
+  LIBRARY_EXPECTED_STORAGE_PATHS,
   probeHttpExists,
   resolveLibraryFileUrl,
 } from "../../utils/libraryAssets";
@@ -456,6 +458,25 @@ export function Library() {
 
       <section className="py-12 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {!libraryAssetsUseSupabaseStorage() ? (
+            <div className="mb-8 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+              Library files are being prepared for download. Buttons marked &quot;Coming soon&quot;
+              will open real guides, checklists, videos, and articles after files are uploaded to
+              Supabase Storage ({LIBRARY_EXPECTED_STORAGE_PATHS.length} assets planned). Need
+              something now?{" "}
+              <Link to="/contact" className="font-medium text-sage-800 underline">
+                Contact us
+              </Link>
+              .
+            </div>
+          ) : storageAvailability && Object.keys(storageAvailability).length > 0 ? (
+            <div className="mb-8 rounded-lg border border-sage-200 bg-sage-50 px-4 py-3 text-sm text-sage-900">
+              {Object.values(storageAvailability).filter(Boolean).length} of{" "}
+              {LIBRARY_EXPECTED_STORAGE_PATHS.length} hosted files are available. Missing items stay
+              marked &quot;Coming soon&quot; until uploaded.
+            </div>
+          ) : null}
+
           <Tabs defaultValue="all" className="space-y-8">
             <div className="space-y-4">
               <div className="flex flex-col md:flex-row gap-4">

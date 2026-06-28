@@ -7,7 +7,7 @@ import { BackToHomeLink } from "../components/BackToHome";
  * Privacy policy for Sage With You (SageÉlan Foundation, Inc.).
  * Substance follows SageÉlan-approved legal templates, adjusted for this site (contact form, auth, library, cookies).
  */
-const LAST_UPDATED = "January 18, 2026";
+const LAST_UPDATED = "June 25, 2026";
 
 export function Privacy() {
   return (
@@ -78,11 +78,23 @@ export function Privacy() {
                 </p>
               </div>
               <div>
+                <h3 className="font-semibold text-gray-900 mb-2">Sage Badge and community feedback (WPE)</h3>
+                <p>
+                  If you use Sage Badge features, we may process organization inquiry details, assessor
+                  notes (staff-only), and structured community experience submissions (What People Are
+                  Experiencing). WPE submissions require a signed-in account and are reviewed before
+                  they affect public aggregates. See our{" "}
+                  <Link to="/sage-badge/wpe-policy" className="text-sage-700 font-medium hover:underline">
+                    WPE moderation policy
+                  </Link>
+                  .
+                </p>
+              </div>
+              <div>
                 <h3 className="font-semibold text-gray-900 mb-2">Resource library (browser storage)</h3>
                 <p>
-                  If you save resources in the library, that list may be stored locally in your browser (for example{" "}
-                  <code className="rounded bg-gray-100 px-1 text-xs">localStorage</code>) and is not sent to our servers
-                  unless we later offer a signed-in sync feature.
+                  If you save resources in the library, that list may be stored on this device in your browser and is
+                  not sent to our servers unless we later offer a signed-in sync feature.
                 </p>
               </div>
             </CardContent>

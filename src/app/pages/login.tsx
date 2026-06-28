@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
-import { Mail, Lock, AlertCircle } from 'lucide-react';
+import { Mail, AlertCircle } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
+import { PasswordInput } from '../components/PasswordInput';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { supabase } from '../../utils/supabase';
 import { AuthBrandHeader } from '../components/AuthBrandHeader';
@@ -14,6 +15,8 @@ import { initSupabaseAuth } from '../../utils/authSession';
 type LoginLocationState = {
   email?: string;
   needsEmailConfirm?: boolean;
+  /** In-app path after successful sign-in (e.g. /assessments). */
+  redirectTo?: string;
 };
 
 export function Login() {
@@ -52,7 +55,12 @@ export function Login() {
       if (error) throw error;
 
       if (data.user) {
-        navigate('/');
+        const next = loginState.redirectTo?.trim();
+        if (next?.startsWith('/') && !next.startsWith('//')) {
+          navigate(next);
+        } else {
+          navigate('/');
+        }
       }
     } catch (error: unknown) {
       if (isEmailNotConfirmed(error)) {
@@ -138,24 +146,21 @@ export function Login() {
                 <label htmlFor="password" className="text-sm font-medium text-gray-700">
                   Password
                 </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="pl-10"
-                  />
-                </div>
+                <PasswordInput
+                  id="password"
+                  visibilityLabel="password"
+                  autoComplete="current-password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
               </div>
 
-              <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center justify-end text-sm">
                 <Link
                   to="/forgot-password"
-                  className="text-sage-600 hover:text-sage-700 hover:underline"
+                  className="font-medium text-gray-900 underline underline-offset-2 hover:text-sage-700"
                 >
                   Forgot password?
                 </Link>

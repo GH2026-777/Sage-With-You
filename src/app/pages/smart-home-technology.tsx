@@ -1,4 +1,4 @@
-import { Smartphone, Wifi, Bell, Lock, Camera, Thermometer, ArrowRight, Lightbulb } from "lucide-react";
+import { Smartphone, Wifi, Bell, Lock as LockIcon, Camera, Thermometer, ArrowRight, Lightbulb } from "lucide-react";
 import { Link } from "react-router";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { Button } from "../components/ui/button";
@@ -20,7 +20,7 @@ export function SmartHomeTechnology() {
       ],
     },
     {
-      icon: Lock,
+      icon: LockIcon,
       title: "Remote Access & Control",
       description: "Technology for managing home access and security from anywhere.",
       examples: [

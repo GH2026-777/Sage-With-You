@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Heart, Users, BookOpen, Home as HomeIcon, ArrowRight, ClipboardCheck, Library, Settings, Smartphone } from "lucide-react";
+import { Heart, Users, BookOpen, Home as HomeIcon, ArrowRight, ClipboardCheck, Library, Settings, Smartphone, Award } from "lucide-react";
 import { ImageWithFallback } from "../components/figma/ImageWithFallback";
 import { SiteLogo } from "../components/SiteLogo";
 import { Button } from "../components/ui/button";
@@ -7,6 +7,13 @@ import { Card, CardContent } from "../components/ui/card";
 
 export function Home() {
   const features = [
+    {
+      icon: Award,
+      title: "Sage Badge",
+      description:
+        "Recognizing organizations that meet The Sage Standard for supporting aging safely and confidently at home.",
+      path: "/sage-badge",
+    },
     {
       icon: Heart,
       title: "Person-Centered Care",
@@ -75,24 +82,40 @@ export function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
+              <Link
+                to="/sage-badge"
+                className="inline-flex items-center gap-2 rounded-full bg-sage-100 px-4 py-1.5 text-sm font-medium text-sage-800 hover:bg-sage-200 transition-colors mb-4"
+              >
+                <Award className="h-4 w-4" aria-hidden />
+                New: Sage Badge. Verify organizations supporting living in place
+              </Link>
               <SiteLogo variant="hero" linkToHome={false} className="mb-2.5 block lg:mb-3.5" />
               <p className="max-w-xl text-lg text-gray-700 mb-8 leading-relaxed sm:text-xl">
                 Your supportive partner for aging with dignity and confidence.
                 We provide evidence-informed guidance for individuals,
                 caregivers, and families choosing to age at home.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link to="/programs">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-4">
+                <Link to="/sage-badge">
                   <Button size="lg" className="bg-sage-600 hover:bg-sage-700">
-                    Explore Our Programs
+                    Explore Sage Badge
                     <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link to="/programs">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-sage-600 text-sage-600 hover:bg-sage-50"
+                  >
+                    Our Programs
                   </Button>
                 </Link>
                 <Link to="/resources">
                   <Button
                     size="lg"
                     variant="outline"
-                    className="border-sage-600 text-sage-600 hover:bg-sage-50"
+                    className="border-gray-300 text-gray-700 hover:bg-gray-50"
                   >
                     View Resources
                   </Button>

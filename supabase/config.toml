@@ -1,0 +1,46 @@
+# Sage With You — Supabase CLI config
+# Dashboard: https://supabase.com/dashboard/project/htckswutkpktxclyijwk
+# Push auth redirect URLs only: fix-supabase-auth-urls.bat
+
+project_id = "htckswutkpktxclyijwk"
+
+[auth]
+site_url = "https://sagewithyou.org"
+additional_redirect_urls = [
+  "https://sagewithyou.org/**",
+  "https://sagewithyou.org/login",
+  "https://sagewithyou.org/reset-password",
+  "http://localhost:5173/**",
+  "http://localhost:5173/login",
+  "http://localhost:5173/reset-password",
+  "http://localhost:5174/**",
+  "http://localhost:5174/",
+]
+
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true
+
+[auth.email]
+enable_confirmations = true
+max_frequency = "1m0s"
+otp_length = 8
+
+# Sign-up must use Authentication → Custom SMTP (same as Sage Panthers). Hook caused 504 timeouts.
+[auth.hook.send_email]
+enabled = false
+
+[functions.submit-contact]
+verify_jwt = true
+
+[functions.delete-account]
+verify_jwt = false
+
+[functions.submit-badge-inquiry]
+verify_jwt = false
+
+[functions.submit-badge-wpe]
+verify_jwt = false
+
+[functions.publish-badge-assessment]
+verify_jwt = false

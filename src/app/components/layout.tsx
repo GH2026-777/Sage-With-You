@@ -1,5 +1,5 @@
 import { Outlet, Link, ScrollRestoration, useLocation, useNavigate } from "react-router";
-import { Menu, X, User, LogOut } from "lucide-react";
+import { Menu, X, User, LogOut, ChevronDown } from "lucide-react";
 import { FOOTER_HEADING_CLASS, SiteLogo } from "./SiteLogo";
 import { useState, useEffect } from "react";
 import { AccessibilityWidget } from "./accessibility-widget";
@@ -8,6 +8,7 @@ import { supabase } from "../../utils/supabase";
 import { initSupabaseAuth, isInvalidRefreshTokenError, clearStaleSupabaseSession } from "../../utils/authSession";
 import { Toaster } from "sonner";
 import { SiteMeta } from "./SiteMeta";
+import { initAnalyticsIfAllowed, trackPageView } from "../../utils/analytics";
 
 export function Layout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -17,8 +18,12 @@ export function Layout() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check authentication status
-    checkAuth();
+    initAnalyticsIfAllowed();
+    trackPageView(location.pathname);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    void checkAuth();
 
     // Listen for auth changes
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
@@ -56,26 +61,33 @@ export function Layout() {
     navigate('/');
   };
 
-  const navigation = [
-    { name: "Home", href: "/" },
+  type NavChild = { name: string; href: string };
+  type NavItem = { name: string; href: string; children?: NavChild[] };
+
+  const navigation: NavItem[] = [
     { name: "About", href: "/about" },
     { name: "Programs", href: "/programs" },
-    { name: "Resources", href: "/resources" },
+    { name: "Sage Badge", href: "/sage-badge" },
+    {
+      name: "Resources",
+      href: "/resources",
+      children: [{ name: "Library", href: "/library" }],
+    },
     { name: "Assessments", href: "/assessments" },
-    { name: "Library", href: "/library" },
-    { name: "Account", href: "/account" },
   ];
 
   const footerExploreLinks = [
     { name: "About us", href: "/about" },
     { name: "Programs", href: "/programs" },
+    { name: "Sage Badge", href: "/sage-badge" },
     { name: "Contact", href: "/contact" },
   ];
 
   const footerResourceLinks = [
-    { name: "Resources", href: "/resources" },
     { name: "Assessments", href: "/assessments" },
     { name: "Library", href: "/library" },
+    { name: "FAQs", href: "/resources#faq" },
+    { name: "Support", href: "/contact" },
   ];
 
   const footerLinkClass =
@@ -84,14 +96,18 @@ export function Layout() {
   const legalLinks = [
     { name: "Privacy policy", href: "/privacy" },
     { name: "Terms of Service", href: "/terms" },
+    { name: "Accessibility", href: "/accessibility-features" },
   ];
 
-  const isActive = (href: string) => {
-    if (href === "/") {
-      return location.pathname === "/";
-    }
-    return location.pathname.startsWith(href);
+  const isActive = (href: string, children?: NavChild[]) => {
+    if (location.pathname.startsWith(href)) return true;
+    return children?.some((child) => location.pathname.startsWith(child.href)) ?? false;
   };
+
+  const navLinkClass = (href: string, children?: NavChild[]) =>
+    isActive(href, children)
+      ? "text-sage-600 font-medium"
+      : "text-gray-700 hover:text-sage-600";
 
   useEffect(() => {
     const current = `${location.pathname}${location.search}`;
@@ -114,19 +130,49 @@ export function Layout() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-6">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className={`text-base transition-colors ${
-                    isActive(item.href)
-                      ? "text-sage-600 font-medium"
-                      : "text-gray-700 hover:text-sage-600"
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
+              {navigation.map((item) =>
+                item.children?.length ? (
+                  <div key={item.name} className="relative group">
+                    <div className="flex items-center gap-0.5">
+                      <Link
+                        to={item.href}
+                        className={`text-base transition-colors ${navLinkClass(item.href, item.children)}`}
+                      >
+                        {item.name}
+                      </Link>
+                      <ChevronDown
+                        className={`h-4 w-4 transition-colors ${navLinkClass(item.href, item.children)}`}
+                        aria-hidden
+                      />
+                    </div>
+                    <div className="absolute left-0 top-full pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all">
+                      <div className="min-w-[10rem] rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
+                        {item.children.map((child) => (
+                          <Link
+                            key={child.href}
+                            to={child.href}
+                            className={`block px-4 py-2 text-sm transition-colors ${
+                              location.pathname.startsWith(child.href)
+                                ? "bg-sage-50 text-sage-700 font-medium"
+                                : "text-gray-700 hover:bg-gray-50 hover:text-sage-600"
+                            }`}
+                          >
+                            {child.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className={`text-base transition-colors ${navLinkClass(item.href)}`}
+                  >
+                    {item.name}
+                  </Link>
+                ),
+              )}
               {isAuthenticated ? (
                 <div className="flex items-center gap-3 ml-2">
                   <Link
@@ -172,32 +218,44 @@ export function Layout() {
           {mobileMenuOpen && (
             <div className="md:hidden py-4 border-t border-gray-200">
               {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-4 py-3 text-base transition-colors ${
-                    isActive(item.href)
-                      ? "text-sage-600 bg-sage-50 font-medium"
-                      : "text-gray-700 hover:bg-gray-50"
-                  }`}
-                >
-                  {item.name}
-                </Link>
+                <div key={item.name}>
+                  <Link
+                    to={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`block px-4 py-3 text-base transition-colors ${
+                      isActive(item.href, item.children)
+                        ? "text-sage-600 bg-sage-50 font-medium"
+                        : "text-gray-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                  {item.children?.map((child) => (
+                    <Link
+                      key={child.href}
+                      to={child.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`block py-2.5 pl-8 pr-4 text-base transition-colors ${
+                        location.pathname.startsWith(child.href)
+                          ? "text-sage-600 bg-sage-50 font-medium"
+                          : "text-gray-600 hover:bg-gray-50"
+                      }`}
+                    >
+                      {child.name}
+                    </Link>
+                  ))}
+                </div>
               ))}
               {isAuthenticated ? (
                 <div className="border-t border-gray-200 mt-2 pt-2">
                   <Link
                     to="/account"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block px-4 py-3 text-base text-gray-700 hover:bg-gray-50"
+                    className="flex items-center gap-2 px-4 py-3 text-base text-gray-700 hover:bg-gray-50"
                   >
-                    Account settings
-                  </Link>
-                  <div className="px-4 py-2 flex items-center gap-2 bg-sage-50 mx-4 rounded-lg mb-2">
                     <User className="h-4 w-4 text-sage-600" />
-                    <span className="text-sm text-sage-700">{userEmail}</span>
-                  </div>
+                    {userEmail?.split("@")[0] ?? "Account"}
+                  </Link>
                   <button
                     onClick={() => {
                       handleLogout();
@@ -231,7 +289,12 @@ export function Layout() {
         <Outlet />
       </main>
 
-      <CookieConsentBanner />
+      <CookieConsentBanner
+        onConsentChange={() => {
+          initAnalyticsIfAllowed();
+          trackPageView(location.pathname);
+        }}
+      />
 
       <Toaster position="bottom-right" theme="light" richColors closeButton />
 
@@ -302,6 +365,18 @@ export function Layout() {
             {/* Contact Info */}
             <div className="w-max max-w-full sm:col-span-2 lg:col-span-2">
               <h3 className={`${FOOTER_HEADING_CLASS} mb-4`}>Get in Touch</h3>
+              <ul className="space-y-3 mb-4">
+                <li>
+                  <Link to="/contact" className={footerLinkClass}>
+                    Contact us
+                  </Link>
+                </li>
+                <li>
+                  <a href="mailto:info@sageelan.org" className={footerLinkClass}>
+                    info@sageelan.org
+                  </a>
+                </li>
+              </ul>
               <p className="text-sm text-white mb-2">
                 <a
                   href="https://sageelan.org"
@@ -325,6 +400,17 @@ export function Layout() {
             <p>
               &copy; {new Date().getFullYear()} SageÉlan Foundation, Inc. All
               rights reserved.
+            </p>
+            <p className="mt-2">
+              Part of the{' '}
+              <a
+                href="https://sageelan.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/80 transition-colors hover:text-white underline-offset-2 hover:underline"
+              >
+                SageÉlan Network
+              </a>
             </p>
           </div>
         </div>

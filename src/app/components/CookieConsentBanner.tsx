@@ -73,15 +73,14 @@ export function CookieConsentBanner({ onConsentChange }: CookieConsentBannerProp
             </div>
             <p className="mb-4 text-sm text-gray-600">
               Essential cookies keep sign-in and security working. We do <strong>not</strong> load third-party
-              analytics scripts today; if you accept, that records your choice so we can turn on measurement later under
-              the same notice (storage key{" "}
-              <code className="rounded bg-gray-100 px-1 text-xs">cookie_consent</code>). Read the{" "}
+              analytics scripts today. If you accept, we record your choice so we can turn on measurement later under
+              the same notice. Read the{" "}
               <Link to="/privacy" className="font-medium text-sage-700 underline-offset-2 hover:underline">
                 Privacy policy
               </Link>{" "}
-              and change preferences anytime on{" "}
+              or update your choice anytime in{" "}
               <Link to="/account#cookies" className="font-medium text-sage-700 underline-offset-2 hover:underline">
-                Account → Cookies
+                account settings
               </Link>
               .
             </p>

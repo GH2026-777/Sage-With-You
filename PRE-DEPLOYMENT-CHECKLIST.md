@@ -15,14 +15,20 @@ Complete before running `deploy-godaddy.bat` / `deploy-godaddy.sh`.
 ### Supabase (build env)
 
 - [ ] `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` set
-- [ ] `VITE_SITE_URL` matches deploy host (e.g. `https://sage-with-you.org`)
+- [ ] `VITE_SITE_URL` matches deploy host (e.g. `https://sagewithyou.org`)
 
 ### Dashboard (see `docs/SUPABASE_OPS_CHECKLIST.md`)
 
-- [ ] Migrations 001–004 applied
+- [ ] Migrations 001–005 applied (`005` = Sage Badge Phase 1)
 - [ ] Edge Functions deployed
-- [ ] SMTP / auth email path verified
+- [ ] SMTP / auth email path verified (`info@sageelan.org`)
 - [ ] Auth redirect URLs include production + localhost
+
+### Sage Badge (pre–go-live)
+
+- [ ] Staging gate ON — full badge UX available **after** password unlock (see `docs/SAGE_BADGE_GO_LIVE.md`)
+- [ ] `badge_staff_roles` seeded for admin user(s)
+- [ ] Legal / SOW / WPE policy items on go-live list (not required for gated staging)
 
 ---
 

@@ -12,16 +12,13 @@ if (!url || !anonKey) {
   console.error(`[Sage With You] ${hint}`);
 }
 
-/**
- * Browser client for Sage With You. Uses the public anon key; all data access
- * must be enforced with Row Level Security in Supabase.
- */
+/** Same auth client options as Sage Panthers: dashboard Custom SMTP only, no auth hooks. */
 export const supabase = createClient(url ?? "", anonKey ?? "", {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,
-    flowType: "pkce",
+    storageKey: "sagewithyou-auth",
   },
 });
 

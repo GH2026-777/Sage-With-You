@@ -2,7 +2,7 @@
 export function siteOrigin(): string {
   const raw = import.meta.env.VITE_SITE_URL?.trim();
   if (raw) return raw.replace(/\/$/, "");
-  return "https://sage-with-you.org";
+  return "https://sagewithyou.org";
 }
 
 /** Absolute URL for default social preview image (`public/og-image.png`). */
@@ -29,7 +29,15 @@ const ROUTE_SEO: { prefix: string; entry: SeoEntry }[] = [
   { prefix: "/forgot-password", entry: { title: "Forgot password", description: "Request a password reset link for Sage With You.", noindex: true } },
   { prefix: "/join", entry: { title: "Create account", description: "Join Sage With You to save preferences and access account tools.", noindex: true } },
   { prefix: "/login", entry: { title: "Sign in", description: "Sign in to your Sage With You account.", noindex: true } },
-  { prefix: "/account", entry: { title: "Account", description: "Profile, privacy, email preferences, and security for Sage With You.", noindex: true } },
+  { prefix: "/account", entry: { title: "Account", description: "Profile, privacy, communication preferences, and security for Sage With You.", noindex: true } },
+  { prefix: "/sage-badge/wpe-policy", entry: { title: "WPE moderation policy", description: "How Sage With You reviews community experience submissions for Sage Verified organizations." } },
+  { prefix: "/sage-badge/scoring-standard", entry: { title: "The Sage Standard", description: "How Sage Badge scores organizations: seven pillars, certification levels, and WPE community feedback rules." } },
+  { prefix: "/sage-badge/companies", entry: { title: "Sage Verified companies", description: "Directory of Sage Badge verified organizations supporting living in place." } },
+  { prefix: "/sage-badge/for-companies", entry: { title: "Sage Badge for organizations", description: "Request assessment, Sage Insight Panel, or beta testing for your organization." } },
+  { prefix: "/sage-badge/suggest-company", entry: { title: "Suggest a company", description: "Nominate an organization for the Sage Verified company directory." } },
+  { prefix: "/sage-badge/experience", entry: { title: "Share your experience", description: "Submit What People Are Experiencing feedback for Sage Verified companies.", noindex: true } },
+  { prefix: "/sage-badge/admin", entry: { title: "Sage Badge admin", description: "Staff triage for Sage Badge program.", noindex: true } },
+  { prefix: "/sage-badge", entry: { title: "Sage Badge", description: "The Sage Standard and Sage Verified recognition for organizations supporting aging in place." } },
   { prefix: "/library", entry: { title: "Resource library", description: "Guides, checklists, videos, and articles for living in place." } },
   { prefix: "/assessments", entry: { title: "Assessments", description: "Wellbeing and readiness tools to support your aging-in-place journey." } },
   { prefix: "/contact", entry: { title: "Contact", description: "Reach Sage With You / SageÉlan Foundation with questions or partnership ideas." } },

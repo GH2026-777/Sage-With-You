@@ -1,14 +1,22 @@
 import { useState } from "react";
-import { ClipboardCheck, Heart, Home, ChevronRight } from "lucide-react";
+import { Link } from "react-router";
+import { ClipboardCheck, Heart, Home as HomeIcon, ChevronRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { RadioGroup, RadioGroupItem } from "../components/ui/radio-group";
 import { Label } from "../components/ui/label";
 import { Progress } from "../components/ui/progress";
+import { RequireSignIn } from "../components/RequireSignIn";
+import {
+  assessmentProgressPercent,
+  getAssessmentResultsBand,
+  maxPointsForQuestions,
+  scoreAssessmentAnswers,
+} from "../../lib/selfAssessmentScoring";
 
 type Assessment = "none" | "home-safety" | "caregiver" | "readiness";
 
-export function Assessments() {
+function AssessmentsContent() {
   const [activeAssessment, setActiveAssessment] = useState<Assessment>("none");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -17,7 +25,7 @@ export function Assessments() {
   const assessments = [
     {
       id: "home-safety" as Assessment,
-      icon: Home,
+      icon: HomeIcon,
       title: "Home Safety Assessment",
       description:
         "Evaluate your home environment for potential safety hazards and identify areas for improvement.",
@@ -213,6 +221,13 @@ export function Assessments() {
     (a) => a.id === activeAssessment
   );
 
+  const beginAssessment = (id: Assessment) => {
+    setActiveAssessment(id);
+    setCurrentQuestion(0);
+    setAnswers({});
+    setShowResults(false);
+  };
+
   const handleAnswerChange = (value: string) => {
     setAnswers({ ...answers, [currentQuestion]: value });
   };
@@ -231,67 +246,6 @@ export function Assessments() {
   const handlePrevious = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
-    }
-  };
-
-  const calculateScore = () => {
-    if (!currentAssessmentData) return { total: 0, max: 0, percentage: 0 };
-
-    let total = 0;
-    const max = currentAssessmentData.questions.length * 3;
-
-    currentAssessmentData.questions.forEach((q, index) => {
-      const answer = answers[index];
-      const option = q.options.find((opt) => opt.value === answer);
-      if (option) {
-        total += option.points;
-      }
-    });
-
-    return {
-      total,
-      max,
-      percentage: Math.round((total / max) * 100),
-    };
-  };
-
-  const getResultsMessage = (percentage: number) => {
-    if (percentage >= 80) {
-      return {
-        level: "Excellent",
-        color: "text-green-600",
-        bgColor: "bg-green-50",
-        borderColor: "border-green-200",
-        message:
-          "Great work! You're doing very well in this area. Continue to maintain these positive practices.",
-      };
-    } else if (percentage >= 60) {
-      return {
-        level: "Good",
-        color: "text-sage-600",
-        bgColor: "bg-sage-50",
-        borderColor: "border-sage-200",
-        message:
-          "You're on the right track. Consider reviewing the areas that scored lower and explore our resources for improvement.",
-      };
-    } else if (percentage >= 40) {
-      return {
-        level: "Fair",
-        color: "text-yellow-600",
-        bgColor: "bg-yellow-50",
-        borderColor: "border-yellow-200",
-        message:
-          "There are several areas that could benefit from attention. We recommend exploring our programs and resources to address these areas.",
-      };
-    } else {
-      return {
-        level: "Needs Attention",
-        color: "text-orange-600",
-        bgColor: "bg-orange-50",
-        borderColor: "border-orange-200",
-        message:
-          "Several important areas need attention. Please consider reaching out for support and reviewing our comprehensive resources.",
-      };
     }
   };
 
@@ -349,7 +303,7 @@ export function Assessments() {
                         {assessment.duration}
                       </p>
                       <Button
-                        onClick={() => setActiveAssessment(assessment.id)}
+                        onClick={() => beginAssessment(assessment.id)}
                         className="w-full bg-sage-600 hover:bg-sage-700"
                       >
                         Start Assessment
@@ -384,9 +338,11 @@ export function Assessments() {
     );
   }
 
-  if (showResults) {
-    const score = calculateScore();
-    const results = getResultsMessage(score.percentage);
+  if (showResults && currentAssessmentData) {
+    const score = scoreAssessmentAnswers(currentAssessmentData.questions, answers);
+    const questionCount = currentAssessmentData.questions.length;
+    const fullMax = maxPointsForQuestions(questionCount);
+    const results = getAssessmentResultsBand(score.percentage);
 
     return (
       <div className="min-h-screen bg-gray-50 py-20">
@@ -405,8 +361,12 @@ export function Assessments() {
                   {score.percentage}%
                 </div>
                 <div className="text-xl text-gray-700">
-                  {score.total} out of {score.max} points
+                  {score.total} out of {fullMax} points
                 </div>
+                <p className="mt-2 text-sm text-gray-500">
+                  Each question is scored from 0 to 3. Your percentage is based on the {questionCount}{" "}
+                  answers you provided.
+                </p>
               </div>
 
               {/* Results Message */}
@@ -428,7 +388,10 @@ export function Assessments() {
                   <li className="flex items-start">
                     <ChevronRight className="h-5 w-5 text-sage-600 mr-2 flex-shrink-0 mt-0.5" />
                     <span>
-                      Review our Resources page for detailed guides and tools
+                      <Link to="/resources" className="font-medium text-sage-700 hover:underline">
+                        Review our Resources page
+                      </Link>{" "}
+                      for detailed guides and tools
                     </span>
                   </li>
                   <li className="flex items-start">
@@ -477,25 +440,36 @@ export function Assessments() {
   }
 
   // Assessment in progress
-  const progress =
-    currentAssessmentData
-      ? ((currentQuestion + 1) / currentAssessmentData.questions.length) * 100
-      : 0;
+  const questionCount = currentAssessmentData?.questions.length ?? 0;
+  const progress = assessmentProgressPercent(currentQuestion, questionCount);
 
   return (
     <div className="min-h-screen bg-gray-50 py-20">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+        <p className="mb-4 text-sm">
+          <button
+            type="button"
+            onClick={resetAssessment}
+            className="font-medium text-sage-700 hover:underline"
+          >
+            ← Back to all assessments
+          </button>
+        </p>
         <Card className="border-gray-200">
           <CardHeader>
+            <p className="text-sm font-medium text-sage-700 mb-3">{currentAssessmentData?.title}</p>
             <div className="mb-4">
               <div className="flex justify-between text-sm text-gray-600 mb-2">
                 <span>
-                  Question {currentQuestion + 1} of{" "}
-                  {currentAssessmentData?.questions.length}
+                  Question {currentQuestion + 1} of {questionCount}
                 </span>
-                <span>{Math.round(progress)}% Complete</span>
+                <span>
+                  {progress === 0 && currentQuestion === 0
+                    ? "Getting started"
+                    : `${progress}% through`}
+                </span>
               </div>
-              <Progress value={progress} className="h-2" />
+              <Progress value={progress} className="h-2 [&_[data-slot=progress-indicator]]:bg-sage-600" />
             </div>
             <CardTitle className="text-2xl text-gray-900">
               {currentAssessmentData?.questions[currentQuestion].question}
@@ -508,23 +482,19 @@ export function Assessments() {
               className="space-y-3"
             >
               {currentAssessmentData?.questions[currentQuestion].options.map(
-                (option) => (
-                  <div
-                    key={option.value}
-                    className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-sage-50 hover:border-sage-300 transition-colors cursor-pointer"
-                  >
-                    <RadioGroupItem
-                      value={option.value}
-                      id={option.value}
-                    />
+                (option) => {
+                  const optionId = `${activeAssessment}-q${currentQuestion}-${option.value}`;
+                  return (
                     <Label
-                      htmlFor={option.value}
-                      className="flex-1 cursor-pointer"
+                      key={optionId}
+                      htmlFor={optionId}
+                      className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-sage-50 hover:border-sage-300 transition-colors cursor-pointer"
                     >
-                      {option.label}
+                      <RadioGroupItem value={option.value} id={optionId} />
+                      <span className="flex-1 text-gray-900">{option.label}</span>
                     </Label>
-                  </div>
-                )
+                  );
+                },
               )}
             </RadioGroup>
 
@@ -553,5 +523,17 @@ export function Assessments() {
         </Card>
       </div>
     </div>
+  );
+}
+
+export function Assessments() {
+  return (
+    <RequireSignIn
+      redirectTo="/assessments"
+      title="Sign in to use assessments"
+      description="Create a free account or sign in to access interactive self-assessment tools. Your responses stay private in this browser session."
+    >
+      <AssessmentsContent />
+    </RequireSignIn>
   );
 }

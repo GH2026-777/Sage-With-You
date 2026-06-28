@@ -1,50 +1,30 @@
-# Sign-up with email confirmation
+# Sign-up and auth email (Sage Panthers pattern)
 
-**Confirm email stays ON.** That is required for your risk model.
+**No webhooks. No Edge Function for auth mail.** Only **Authentication → Custom SMTP** in the Supabase dashboard.
 
-Most Sage sites only need **Authentication → Emails → Custom SMTP** (Office 365). **No hook.** Try that first.
+Project: [htckswutkpktxclyijwk](https://supabase.com/dashboard/project/htckswutkpktxclyijwk)
 
----
+## One-time setup
 
-## Simple setup (same as your other projects)
+1. **[Auth Hooks → Send Email](https://supabase.com/dashboard/project/htckswutkpktxclyijwk/auth/hooks)** — must be **off** (delete if present). Run `turn-off-auth-hook.bat` to open this page.
+2. **[Authentication → SMTP](https://supabase.com/dashboard/project/htckswutkpktxclyijwk/auth/smtp)** — copy **exact same settings** from Sage Panthers. Click **Send test email**.
+3. **[URL Configuration](https://supabase.com/dashboard/project/htckswutkpktxclyijwk/auth/url-configuration)** — include `https://sagewithyou.org/**`, `/login`, `/reset-password`, and `http://localhost:5173/**` for dev. Or run `fix-supabase-auth-urls.bat`.
+4. **Confirm email** ON under [Providers → Email](https://supabase.com/dashboard/project/htckswutkpktxclyijwk/auth/providers).
 
-1. [Authentication → Emails → SMTP](https://supabase.com/dashboard/project/htckswutkpktxclyijwk/auth/templates)
-2. **Custom SMTP** ON — same mailbox as contact form:
-   - Host: `smtp.office365.com`
-   - Port: `587`
-   - User / password / From: your `CONTACT_SMTP_*` values
-3. **Send test email** — must arrive in under a few seconds (not timeout)
-4. [Providers → Email](https://supabase.com/dashboard/project/htckswutkpktxclyijwk/auth/providers) → **Confirm email** ON
-5. [URL Configuration](https://supabase.com/dashboard/project/htckswutkpktxclyijwk/auth/url-configuration) → Site URL + `/login` redirect URLs
-6. One test sign-up on `/join`
+## How sign-up works (same as Panthers)
 
-**Do not enable the Send Email hook** if this works.
+1. User fills **Create Account** (`/join`)
+2. Supabase sends **Confirm Your Signup** email via Custom SMTP
+3. User clicks link → lands on `/login`
+4. User **Signs in** with their password
 
----
+Forgot password: `/forgot-password`
 
-## Only if test email or sign-up still times out (504)
+## Contact form (separate)
 
-Then use the backup Edge Function `auth-send-email`:
+Edge Function `submit-contact` + `CONTACT_SMTP_*` secrets. Does not affect sign-up.
 
-1. Run `deploy-supabase-functions.bat`
-2. [Auth Hooks → Send Email](https://supabase.com/dashboard/project/htckswutkpktxclyijwk/auth/hooks) → type **HTTPS** (not Postgres)
-3. URL: `https://htckswutkpktxclyijwk.supabase.co/functions/v1/auth-send-email`
-4. Add `SEND_EMAIL_HOOK_SECRET` to Edge secrets
+## Do not
 
-When the hook is ON, dashboard SMTP is not used for auth mail.
-
----
-
-## Contact form vs sign-up
-
-| | Where |
-|--|--------|
-| Contact form | Edge `submit-contact` + `CONTACT_SMTP_*` |
-| Sign-up email | Usually **Authentication → SMTP** only |
-| Sign-up (backup) | `auth-send-email` hook + same `CONTACT_SMTP_*` |
-
----
-
-## Rate limit message
-
-“Too many emails” = wait ~1 hour or raise **Authentication → Rate Limits → Emails sent**.
+- Enable **Send Email** auth hook (removed from this repo; caused 504 timeouts and TLS errors)
+- Use a different Supabase project — Sage With You is **htckswutkpktxclyijwk**, not Panthers or Main Sites

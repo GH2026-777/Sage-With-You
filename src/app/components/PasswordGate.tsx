@@ -7,7 +7,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { Lock, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { Lock as LockIcon, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
@@ -69,7 +69,7 @@ export function PasswordGate({ children }: PasswordGateProps) {
     setError('');
 
     if (!sitePassword) {
-      setError('Staging access password is not configured (set VITE_STAGING_GATE_PASSWORD).');
+      setError('This preview site is not configured yet. Please contact the Sage With You team.');
       return;
     }
 
@@ -129,7 +129,7 @@ export function PasswordGate({ children }: PasswordGateProps) {
                   Password
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <LockIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}

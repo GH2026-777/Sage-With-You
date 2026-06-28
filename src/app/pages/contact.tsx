@@ -6,6 +6,7 @@ import { Label } from "../components/ui/label";
 import { Textarea } from "../components/ui/textarea";
 import { useState } from "react";
 import { supabase } from "../../utils/supabase";
+import { userFacingMessage } from "../../utils/authErrorMessage";
 
 export function Contact() {
   const [formData, setFormData] = useState({
@@ -49,7 +50,9 @@ export function Contact() {
         );
         return;
       }
-      setSubmitError(fnError.message || "Could not send your message. Please try again.");
+      setSubmitError(
+        userFacingMessage(fnError.message, "We could not send your message. Please try again."),
+      );
       return;
     }
     if (!payload?.ok) {
@@ -59,7 +62,12 @@ export function Contact() {
         );
         return;
       }
-      setSubmitError(payload?.detail || payload?.error || "Could not save your message.");
+      setSubmitError(
+        userFacingMessage(
+          payload?.detail || payload?.error,
+          "We could not save your message. Please try again or email info@sageelan.org.",
+        ),
+      );
       return;
     }
 

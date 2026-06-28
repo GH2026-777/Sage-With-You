@@ -2,9 +2,20 @@ node_modules
 dist
 .env
 .env.local
+.env.production
 .env.*.local
 *.log
 .DS_Store
 *.zip
 test-screenshots/
 supabase/.temp/
+~$*
+
+# Backoffice / internal (SITE workspace only)
+*FULL_SITE_AUDIT*
+SITE-AUDIT-*.md
+SITE_AUDIT_*
+INTERNAL-*.md
+*INTERNAL-*
+*.docx
+*.doc

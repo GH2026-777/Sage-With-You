@@ -19,7 +19,7 @@ Vite + React + Tailwind site for **Sage With You** (SageÉlan Foundation), with 
 Copy `.env.example` to `.env` and set at least:
 
 - `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` — Project **API** settings in Supabase.
-- Optional: `VITE_SITE_URL` — Public origin without trailing slash (Open Graph URLs; default `https://sage-with-you.org`).
+- Optional: `VITE_SITE_URL` — Public origin without trailing slash (Open Graph URLs; default `https://sagewithyou.org`).
 - Optional: `VITE_LIBRARY_USE_STORAGE`, `VITE_LIBRARY_BUCKET` — See `.env.example` and `src/utils/libraryAssets.ts` (`LIBRARY_EXPECTED_STORAGE_PATHS` lists upload paths).
 - Staging gate: `VITE_STAGING_GATE_PASSWORD` (ON by default). Public go-live: `VITE_ENABLE_PASSWORD_GATE=false` then rebuild. See `.env.production.example`.
 
@@ -31,15 +31,29 @@ GitHub Actions workflow `.github/workflows/ci.yml` runs `npm ci`, then **lint**,
 
 ## Supabase
 
-1. Run SQL migrations in order in the SQL Editor (or `supabase db push`):  
-   `001_contact_submissions.sql` → `002_contact_submissions_edge_only.sql` → `003_library_storage_bucket.sql` → `004_contact_submit_rate_limit.sql`.
-2. Deploy Edge Functions (e.g. `deploy-supabase-functions.bat` / `.sh`): **`submit-contact`**, **`delete-account`**, **`auth-send-email`** (hook backup).
-3. Set Edge **secrets** for `submit-contact` (SMTP, optional BCC, `CONTACT_RATE_SALT`, optional `CONTACT_RATE_LIMIT_PER_HOUR`) — see comments in `supabase/functions/submit-contact/index.ts` and `.env.example`.
-4. Full Dashboard checklist: **`docs/SUPABASE_OPS_CHECKLIST.md`**. Auth email: **`docs/AUTH_EMAIL_SETUP.md`**.
+**Windows batch files** (in this folder — Explorer may hide the `.bat` extension):
+
+| File | Purpose |
+|------|---------|
+| `deploy-supabase.bat` | DB migrations |
+| `deploy-supabase-functions.bat` | Edge Functions |
+| `deploy-supabase-all.bat` | Migrations + functions (one run) |
+| `repair-supabase-baseline.bat` | Fix history if SQL Editor was used first |
+| `fix-supabase-auth-urls.bat` | Push auth redirect URLs from `supabase/config.toml` |
+| `turn-off-auth-hook.bat` | Opens Dashboard to disable Send Email hook |
+| `deploy-godaddy.bat` | Build + zip for GoDaddy |
+
+1. Run **`deploy-supabase.bat`** (or `supabase db push`).  
+   If the DB was set up earlier in the SQL Editor and push fails on **001** (*policy already exists*), run **`repair-supabase-baseline.bat`** once — it must use **`--linked`** on the remote project — then run **`deploy-supabase.bat`** again. The deploy script also auto-retries repair once when `SUPABASE_BASELINE_REPAIR_VERSIONS` is set.  
+   `001` → `002` → `003` → `004` → `0050_sage_badge_phase1.sql` (or `0051_badge_rls_repair.sql` if policies already exist) → `006_community_company_nomination.sql` → `007_badge_wpe_unique_submitters.sql` → `008_badge_submit_rate_limit.sql`.
+2. Deploy Edge Functions: **`deploy-supabase-functions.bat`** (`submit-contact`, `delete-account`, `submit-badge-inquiry`, `submit-badge-wpe`, `publish-badge-assessment`).
+3. Sage Badge docs: `docs/SAGE_BADGE_GO_LIVE.md`, `docs/SAGE_WITH_YOU_FULL_SITE_AUDIT.md`, `docs/SAGE_BADGE_PROGRAM_STATUS_WHITEPAPER_v1.1.md`.
+4. Set Edge **secrets** for `submit-contact` and badge functions (SMTP, `BADGE_INQUIRY_NOTIFY_TO`) — see `.env.example` and `docs/SAGE_BADGE_GO_LIVE.md`.
+5. Sign-up mail: **Authentication → Custom SMTP** (same as Sage Panthers). **Do not** enable Send Email hook. See **`docs/AUTH_EMAIL_SETUP.md`** and **`docs/SUPABASE_OPS_CHECKLIST.md`**.
 
 ## Static / SEO
 
-- `public/robots.txt` and `public/sitemap.xml` use `https://sage-with-you.org`. If your production host differs, update those files (or replace at deploy time).
+- `public/robots.txt` and `public/sitemap.xml` use `https://sagewithyou.org`. If your production host differs, update those files (or replace at deploy time).
 - Default meta tags live in `index.html`; route-specific titles and descriptions are updated in the client via `SiteMeta` + `src/lib/siteSeo.ts`.
 - Social preview: `public/og-image.png` (1200×630). Regenerate with `npm run generate:og`. `index.html` includes default `og:image` / `twitter:image` URLs — keep them in sync with production (`VITE_SITE_URL` drives the same URL in `SiteMeta` at runtime).
 

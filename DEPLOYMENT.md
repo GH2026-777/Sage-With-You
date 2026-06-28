@@ -32,7 +32,7 @@ The script runs `npm ci`, `npm run build`, writes `dist/.htaccess` for React Rou
 3. Remove old site files
 4. Upload `sageelan-staging-deploy.zip`, extract, delete the zip on the server
 
-Production host documented in repo: **https://sage-with-you.org**
+Production host documented in repo: **https://sagewithyou.org**
 
 ---
 
@@ -44,7 +44,7 @@ Vite embeds `VITE_*` variables at build time. Copy `.env.production.example` to 
 |----------|---------|
 | `VITE_SUPABASE_URL` | Supabase project URL |
 | `VITE_SUPABASE_ANON_KEY` | Public anon key |
-| `VITE_SITE_URL` | Canonical origin (no trailing slash), e.g. `https://sage-with-you.org` |
+| `VITE_SITE_URL` | Canonical origin (no trailing slash), e.g. `https://sagewithyou.org` |
 | `VITE_ENABLE_PASSWORD_GATE` | `"false"` to disable staging gate (public go-live) |
 | `VITE_STAGING_GATE_PASSWORD` | Staging gate password (required when gate is on in production builds) |
 | `VITE_LIBRARY_USE_STORAGE` | Optional: `true` after library files are in Supabase Storage |
@@ -111,7 +111,7 @@ See `docs/SUPABASE_OPS_CHECKLIST.md` for Dashboard setup.
 ## Going live
 
 1. Complete `docs/SUPABASE_OPS_CHECKLIST.md`
-2. Set `VITE_SITE_URL=https://sage-with-you.org`
+2. Set `VITE_SITE_URL=https://sagewithyou.org`
 3. Set `VITE_ENABLE_PASSWORD_GATE=false`
 4. Rebuild and deploy to production directory
 5. Verify `public/robots.txt`, `public/sitemap.xml`, and OG URLs match production host
