@@ -15,9 +15,9 @@
     "noUnusedParameters": false,
     "paths": {
       "@/*": ["./src/*"],
-      "@site/account/*": ["../shared/site-account/lib/*"]
+      "@site/account/*": ["./src/lib/site-account/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts", "vitest.config.ts", "../shared/site-account/lib/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts", "vitest.config.ts"],
   "exclude": ["src/imports/**"]
 }

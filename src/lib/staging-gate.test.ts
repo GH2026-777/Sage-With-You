@@ -11,6 +11,7 @@ describe("staging-gate", () => {
   });
 
   it("enables gate by default", () => {
+    vi.stubEnv("VITE_ENABLE_PASSWORD_GATE", "");
     expect(isStagingPasswordGateEnabled()).toBe(true);
     expect(shouldNoindexForStaging()).toBe(true);
   });

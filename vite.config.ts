@@ -54,7 +54,7 @@ export default defineConfig({
     alias: {
       // Alias @ to the src directory
       '@': path.resolve(__dirname, './src'),
-      '@site/account': path.resolve(__dirname, '../shared/site-account/lib'),
+      '@site/account': path.resolve(__dirname, './src/lib/site-account'),
     },
   },
 
