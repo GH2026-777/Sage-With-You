@@ -387,6 +387,16 @@ export function Layout() {
                   SageÉlan Foundation, Inc.
                 </a>
               </p>
+              <p className="mb-2">
+                <a
+                  href="https://donorbox.org/sageelan-foundation-impact-fund"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-white/90 transition-colors hover:text-white underline-offset-2 hover:underline"
+                >
+                  Donate to the Impact Fund
+                </a>
+              </p>
               <p className="text-sm text-white leading-relaxed">
                 <span className="block whitespace-nowrap">Committed to supporting</span>
                 <span className="block whitespace-nowrap">wellbeing and confidence</span>
